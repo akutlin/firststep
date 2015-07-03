@@ -12,6 +12,14 @@
 #define NANOVG_GL3_IMPLEMENTATION
 #include <nanovg_gl.h>
 
+#ifndef BOOL
+#define BOOL int
+#define FALSE 0
+#define TRUE 1
+#endif
+
+#define APPNAME "CoolLife"
+
 void getGlVersion(int *major, int *minor)
 {
     const char *verstr = (const char *) glGetString(GL_VERSION);
@@ -78,7 +86,7 @@ void errorcb(int error, const char* desc)
 	printf("GLFW error %d: %s\n", error, desc);
 }
 
-int blowup = 0;
+BOOL isPaused = TRUE;
 int screenshot = 0;
 int premult = 0;
 
@@ -96,210 +104,146 @@ void drawTextCenter(NVGcontext* vg, char* text, int x, int y) {
 	nvgText(vg, dx, dy, text, NULL);
 }
 
-void drawClock(NVGcontext* vg, int screenWidth, int screenHeight) {
-	int clockRadius = (fmin(screenWidth, screenHeight) - 10) / 2;
+int width, height;
+BOOL* cells;
+int mouseI, mouseJ;
 
-	NVGcolor baseColor = nvgRGB(145, 100, 0);
-	NVGcolor lighterColor = nvgRGB(200, 140, 0);
-	NVGcolor dblLighterColor = nvgRGB(255, 177, 0);
-	NVGcolor lightestColor = nvgRGB(255, 195, 60);
+void setCell(int i, int j, BOOL value)
+{
+    cells[j * width + i] = value;
+}
 
-	int widthLight = fmax(clockRadius * 0.0075, 1);
-	int widthMedium = fmax(clockRadius * 0.013, 1);
-	int widthHeavy = fmax(clockRadius * 0.025, 1);
+BOOL getCell(int i, int j)
+{
+    while (i < 0) i += width;
+    i = i % width;
 
+    while (j < 0) j += height;
+    j = j % height;
+    
+    return cells[j * width + i];
+}
 
-	time_t t = time(NULL);
-	struct tm localTime = *localtime(&t);
+void initLife(int w, int h)
+{
+    width = w;
+    height = h;
+    cells = malloc(width * height * sizeof(BOOL));
+    for (int i = 0; i < width * height; i++)
+    {
+        cells[i] = FALSE;
+    }
+    
+    setCell(1, 1, TRUE);
+    setCell(1, 2, TRUE);
+    setCell(2, 2, TRUE);
+}
 
-	nvgTranslate(vg, screenWidth / 2, screenHeight / 2);
-	nvgStrokeColor(vg, baseColor);
+void lifeTurn()
+{
+    BOOL* newCells = malloc(width * height * sizeof(BOOL));
 
-	// Frame
-	nvgSave(vg);
-	nvgBeginPath(vg);
-	nvgCircle(vg, 0, 0, clockRadius);
-	nvgStrokeWidth(vg, widthMedium);
-	nvgStroke(vg);
-	nvgBeginPath(vg);
-	nvgStrokeColor(vg, lighterColor);
-	for (int i = 0; i < 12; i++) {
-		nvgMoveTo(vg, 0, -clockRadius * 0.98);
-		nvgLineTo(vg, 0, -clockRadius * 0.90);
-		for (int j = 0; j < 5; j++) {
-			nvgRotate(vg, 2 * M_PI / 12 / 5);
-			nvgMoveTo(vg, 0, -clockRadius * 0.98);
-			nvgLineTo(vg, 0, -clockRadius * 0.95);
-		}
-	}
-	nvgStroke(vg);
+    for (int i = 0; i < width; i++)
+    for (int j = 0; j < height; j++)
+    {
+        int alive = 0;
+        if (getCell(i - 1, j - 1)) alive ++;
+        if (getCell(i - 1, j)) alive ++;
+        if (getCell(i - 1, j + 1)) alive ++;
+        if (getCell(i + 1, j - 1)) alive ++;
+        if (getCell(i + 1, j)) alive ++;
+        if (getCell(i + 1, j + 1)) alive ++;
+        if (getCell(i, j - 1)) alive ++;
+        if (getCell(i, j + 1)) alive ++;
+        
+        if (getCell(i, j) && (alive == 2 || alive == 3)) newCells[j * width + i] = TRUE;
+        else if (!getCell(i, j) && (alive == 3)) newCells[j * width + i] = TRUE;
+        else newCells[j * width + i] = FALSE;
+    }
+    
+    free(cells);
+    cells = newCells;
+}
 
-	nvgBeginPath(vg);
-	nvgFontFace(vg, "bold");
+float calcScale()
+{
+    float wpw = (float)width / winWidth;
+    float hph = (float)height / winHeight;
+    float k = 1;
+    if (wpw > hph)
+    {
+        k = 1.0f / wpw;
+    }
+    else
+    {
+        k = 1.0f / hph;
+    }
+    return k;
+}
 
-	int digitsRadius = clockRadius * 0.79;
-	int digitLargeSize = clockRadius * 0.29;
-	int digitSmallSize = clockRadius * 0.2;
+void cellUnderMouse()
+{
+    double mx, my;
+    glfwGetCursorPos(window, &mx, &my);
 
-	int clockTitleSize = clockRadius * 0.06;
+    float k = calcScale();
+    float x0 = winWidth / 2 - (width * k / 2);
+    float y0 = winHeight / 2 - (height * k / 2);
+    
+    mouseI = (mx - x0) / k;
+    mouseJ = (my - y0) / k;
+}
 
-	nvgFillColor(vg, dblLighterColor);
+void updateTitle()
+{
+    if (isPaused)
+    {
+        glfwSetWindowTitle(window, APPNAME " [ Pause ]");
+    }
+    else
+    {
+        glfwSetWindowTitle(window, APPNAME);
+    }
+}
 
-	char* nineTitle = "9";
-	nvgFontSize(vg, digitLargeSize);
-	nvgTranslate(vg, -digitsRadius, 0);
-	nvgRotate(vg, - 3 * 2 * M_PI / 12);
-	//nvgTranslate(vg, 0, -digitsRadius);
-	drawTextCenter(vg, nineTitle, 0, 0);
-	nvgFill(vg);
+void drawLife(NVGcontext* vg, int screenWidth, int screenHeight)
+{
+    float k = calcScale();
+    
+    float x0 = winWidth / 2 - (width * k / 2);
+    float y0 = winHeight / 2 - (height * k / 2);
+    
+    for (int i = 0; i < width; i++)
+    for (int j = 0; j < height; j++)
+    {
+        if (getCell(i, j) == FALSE)
+        {
+            nvgFillColor(vg, nvgRGB(0, 0, 0));
+        }
+        else
+        {
+            nvgFillColor(vg, nvgRGB(192, 192, 192));
+        }
+        
+        nvgBeginPath(vg);
+        nvgRect(vg, x0 + i * k, y0 + j * k, k, k);
+        nvgFill(vg);
 
-	nvgFillColor(vg, lighterColor);
-
-	char* tenTitle = "10";
-	nvgFontSize(vg, digitSmallSize);
-	nvgTranslate(vg, 0, digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, -digitsRadius);
-	drawTextCenter(vg, tenTitle, 0, 0);
-	nvgFill(vg);
-
-	char* elevenTitle = "11";
-	nvgTranslate(vg, 0, digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, -digitsRadius);
-	drawTextCenter(vg, elevenTitle, 0, 0);
-	nvgFill(vg);
-
-	nvgFillColor(vg, dblLighterColor);
-
-	char* twelveTitle = "12";
-	nvgFontSize(vg, digitLargeSize);
-	nvgTranslate(vg, 0, digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, -digitsRadius);
-	drawTextCenter(vg, twelveTitle, 0, 0);
-	nvgFill(vg);
-
-	nvgFillColor(vg, lighterColor);
-
-	char* oneTitle = "1";
-	nvgFontSize(vg, digitSmallSize);
-	nvgTranslate(vg, 0, digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, -digitsRadius);
-	drawTextCenter(vg, oneTitle, 0, 0);
-	nvgFill(vg);
-
-	char* twoTitle = "2";
-	nvgTranslate(vg, 0, digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, -digitsRadius);
-	drawTextCenter(vg, twoTitle, 0, 0);
-	nvgFill(vg);
-
-	nvgFillColor(vg, dblLighterColor);
-
-	char* threeTitle = "3";
-	nvgFontSize(vg, digitLargeSize);
-	nvgTranslate(vg, 0, digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, -digitsRadius);
-	drawTextCenter(vg, threeTitle, 0, 0);
-	nvgFill(vg);
-
-	nvgFillColor(vg, lighterColor);
-
-	char* fourTitle = "4";
-	nvgFontSize(vg, digitSmallSize);
-	nvgTranslate(vg, 0, digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12 - M_PI);
-	nvgTranslate(vg, 0, digitsRadius);
-	drawTextCenter(vg, fourTitle, 0, 0);
-	nvgFill(vg);
-
-	char* fiveTitle = "5";
-	nvgTranslate(vg, 0, -digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, digitsRadius);
-	drawTextCenter(vg, fiveTitle, 0, 0);
-	nvgFill(vg);
-
-	nvgFillColor(vg, dblLighterColor);
-
-	char* sixTitle = "6";
-	nvgFontSize(vg, digitLargeSize);
-	nvgTranslate(vg, 0, -digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, digitsRadius);
-	drawTextCenter(vg, sixTitle, 0, 0);
-	nvgFill(vg);
-
-	nvgFillColor(vg, lighterColor);
-
-	char* sevenTitle = "7";
-	nvgFontSize(vg, digitSmallSize);
-	nvgTranslate(vg, 0, -digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, digitsRadius);
-	drawTextCenter(vg, sevenTitle, 0, 0);
-	nvgFill(vg);
-
-	char* eightTitle = "8";
-	nvgTranslate(vg, 0, -digitsRadius);
-	nvgRotate(vg, 2 * M_PI / 12);
-	nvgTranslate(vg, 0, digitsRadius);
-	drawTextCenter(vg, eightTitle, 0, 0);
-	nvgFill(vg);
-
-	nvgRestore(vg);
-
-	nvgSave(vg);
-	nvgFontFace(vg, "black");
-	char* clockTitle = "ALPHA";
-	nvgFontSize(vg, clockTitleSize);
-	nvgFillColor(vg, baseColor);
-	nvgTranslate(vg, 0, clockTitleSize);
-	nvgTextLetterSpacing(vg, clockTitleSize);
-	drawTextCenter(vg, clockTitle, 0, -2 * clockTitleSize);
-	nvgFill(vg);
-	nvgRestore(vg);
-
-	double secAngle = 2 * M_PI / 60 * localTime.tm_sec;
-	double minAngle = 2 * M_PI / 60 * localTime.tm_min + secAngle / 60;
-	double hrAngle = 2 * M_PI / 12 * localTime.tm_hour + minAngle / 60;
-
-	// Hour hand
-	nvgStrokeColor(vg, lighterColor);
-	nvgSave(vg);
-	nvgRotate(vg, hrAngle);
-	nvgBeginPath(vg);
-	nvgMoveTo(vg, 0, clockRadius * 0.02);
-	nvgLineTo(vg, 0, -clockRadius * 0.5);
-	nvgStrokeWidth(vg, widthHeavy);
-	nvgStroke(vg);
-	nvgRestore(vg);
-
-	// Minute hand
-	nvgStrokeColor(vg, lighterColor);
-	nvgSave(vg);
-	nvgRotate(vg, minAngle);
-	nvgBeginPath(vg);
-	nvgMoveTo(vg, 0, clockRadius * 0.04);
-	nvgLineTo(vg, 0, -clockRadius * 0.8);
-	nvgStrokeWidth(vg, widthMedium);
-	nvgStroke(vg);
-	nvgRestore(vg);
-
-	// Second hand
-	nvgStrokeColor(vg, lightestColor);
-	nvgSave(vg);
-	nvgRotate(vg, secAngle);
-	nvgBeginPath(vg);
-	nvgMoveTo(vg, 0, clockRadius * 0.05);
-	nvgLineTo(vg, 0, -clockRadius * 0.9);
-	nvgStrokeWidth(vg, widthLight);
-	nvgStroke(vg);
-	nvgRestore(vg);
+        if (k > 8)
+        {
+            nvgStrokeColor(vg, nvgRGBA(64, 64, 64, 128));
+            nvgStroke(vg);
+        }
+        
+    }
+    
+    if (mouseI >= 0 && mouseI < width && mouseJ >= 0 && mouseJ < height)
+    {
+        nvgFillColor(vg, nvgRGBA(255, 255, 255, 64));
+        nvgBeginPath(vg);
+        nvgRect(vg, x0 + mouseI * k, y0 + mouseJ * k, k, k);
+        nvgFill(vg);
+    }
 }
 
 static void key(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -309,11 +253,29 @@ static void key(GLFWwindow* window, int key, int scancode, int action, int mods)
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-		blowup = !blowup;
+    {
+		isPaused = !isPaused;
+        updateTitle();
+    }
 	if (key == GLFW_KEY_S && action == GLFW_PRESS)
 		screenshot = 1;
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
 		premult = !premult;
+}
+
+static void mouse(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_LEFT)
+    {
+        if (getCell(mouseI, mouseJ) == FALSE)
+        {
+            setCell(mouseI, mouseJ, TRUE);
+        }
+        else
+        {
+            setCell(mouseI, mouseJ, FALSE);
+        }
+    }
 }
 
 static void draw()
@@ -332,7 +294,7 @@ static void draw()
 	nvgBeginFrame(vg, winWidth, winHeight, pxRatio);
 
 	double t1 = glfwGetTime();
-	drawClock(vg, winWidth, winHeight);
+	drawLife(vg, winWidth, winHeight);
 	double t2 = glfwGetTime();
 
 	usleep(fmax((1.0 / fps - (t2 - t1)) * 1000000, 0));
@@ -379,6 +341,7 @@ int main()
 	}
 
 	glfwSetKeyCallback(window, key);
+    glfwSetMouseButtonCallback(window, mouse);
 	glfwSetWindowSizeCallback(window, windowSize);
 
 	glfwMakeContextCurrent(window);
@@ -407,17 +370,25 @@ int main()
 	nvgCreateFont(vg, "bold", "fonts/Walkway_Bold.ttf");
 	nvgCreateFont(vg, "black", "fonts/Walkway_Black.ttf");
 
+    updateTitle();
+    
+    initLife(15, 15);
+    
 	while (!glfwWindowShouldClose(window))
 	{
-		double mx, my, t, dt;
+        if (!isPaused)
+        {
+            lifeTurn();
+        }
 
-		glfwGetCursorPos(window, &mx, &my);
-
+        cellUnderMouse();
 		draw();
 		
 		glfwPollEvents();
 	}
 
+    free(cells);
+    
 	nvgDeleteGL3(vg);
 
 	glfwTerminate();

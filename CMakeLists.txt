@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.8)
 
-set(PROJNAME "AlphaClock")
+set(PROJNAME "CoolLife")
 
 set(ALLRESOURCES 
 	"fonts/Walkway_Black.ttf"
