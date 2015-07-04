@@ -267,13 +267,17 @@ static void mouse(GLFWwindow* window, int button, int action, int mods)
 {
     if (button == GLFW_MOUSE_BUTTON_LEFT)
     {
-        if (getCell(mouseI, mouseJ) == FALSE)
+        int state = glfwGetMouseButton(window, button);
+        if (state == GLFW_PRESS)
         {
-            setCell(mouseI, mouseJ, TRUE);
-        }
-        else
-        {
-            setCell(mouseI, mouseJ, FALSE);
+            if (getCell(mouseI, mouseJ) == FALSE)
+            {
+                setCell(mouseI, mouseJ, TRUE);
+            }
+            else
+            {
+                setCell(mouseI, mouseJ, FALSE);
+            }
         }
     }
 }
