@@ -21,6 +21,9 @@ public class LifeMain {
 	private Cells field;
 	
 	private Callback cb = new CallbackAdapter() {
+		private boolean isDown = false;
+		private boolean clickedColor;
+		
 		
 		@Override
 		public void windowSize(long window, int width, int height) {
@@ -50,15 +53,28 @@ public class LifeMain {
 		public void mouseButton(long window, int button, int action, int mods) {
 		    if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_PRESS)
 		    {
+		    	isDown = true;
 		        if (!field.getCell(mouseI, mouseJ))
 		        {
 		        	field.setCell(mouseI, mouseJ, true);
+		        	clickedColor = true;
 		        }
 		        else
 		        {
 		        	field.setCell(mouseI, mouseJ, false);
+		        	clickedColor = false;
 		        }
 		    }
+		    
+		    if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+		    	isDown = false;
+		    }
+		}
+		
+		public void cursorPos(long window, double x, double y) {
+			if (isDown) {
+	        	field.setCell(mouseI, mouseJ, clickedColor);
+			}
 		}
 	};
 	
