@@ -3,74 +3,30 @@ package firststep;
 import firststep.gl3w.GL3W;
 import firststep.glfw.GLFW;
 import firststep.glfw.GLFWCallback;
+import firststep.glfw.GLFWCallbackAdapter;
+import firststep.nvg.Color;
+import firststep.nvg.NVG;
 
 public class Main {
 	static {
 		System.loadLibrary("firststep");
 	}
 	
-	private static native void start();
+	private long window; 
+	private long vg;
+	private float pxRatio;
+	private double fps = 25.0;
 	
-	private static GLFWCallback cb = new GLFWCallback() {
+	private GLFWCallback cb = new GLFWCallbackAdapter() {
 		
 		@Override
 		public void windowSize(long window, int width, int height) {
-			// TODO Auto-generated method stub
-			
+			drawContents(vg);
 		}
 		
 		@Override
 		public void windowRefresh(long window) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void windowPos(long window, int x, int y) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void windowIconify(long window, boolean iconified) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void windowFocus(long window, boolean focused) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void windowClose(long window) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void scroll(long window, double scrollX, double scrollY) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void mouseButton(long window, int button, int action, int mods) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void monitor(long monitor, boolean connected) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void key(long window, int key, int scancode, int action, int mods) {
-			// TODO Auto-generated method stub
-			
+			drawContents(vg);
 		}
 		
 		@Override
@@ -78,31 +34,51 @@ public class Main {
 			System.out.println("GLFW error " + error + ": " + description);
 		}
 		
-		@Override
-		public void cursorPos(long window, double x, double y) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void cursorEnter(long window, boolean entered) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public void character(long window, char character) {
-			// TODO Auto-generated method stub
-			
-		}
 	};
 	
+	private void drawContents(long vg) {
+		int winWidth = GLFW.glfwGetWindowWidth(window);
+		int winHeight = GLFW.glfwGetWindowHeight(window);
+		
+		int fbWidth = winWidth;	// TODO FramebufferSize
+		int fbHeight = winHeight;	// TODO FramebufferSize
+		
+		// Calculate pixel ration for hi-dpi devices.
+		pxRatio = (float)fbWidth / (float)winWidth;
+
+		GL3W.glViewport(0, 0, fbWidth, fbHeight);
+		GL3W.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+		GL3W.glClear(GL3W.GL_COLOR_BUFFER_BIT | GL3W.GL_STENCIL_BUFFER_BIT | GL3W.GL_DEPTH_BUFFER_BIT);
+		
+		NVG.beginFrame(vg, winWidth, winHeight, pxRatio);
+
+		NVG.beginPath(vg);
+        NVG.fillColor(vg, new Color(0.5f, 0.5f, 0.5f, 1f));
+        NVG.rect(vg, 10, 20, 30, 40);
+        NVG.fill(vg);
+
+        NVG.endFrame(vg);
+
+        GLFW.glfwSwapBuffers(window);
+	}
 	
-	public static void main(String... args) {
-		boolean b = GLFW.glfwInit();
-		if (!b) {
-			System.out.println("GLFW initialization failed");
-			Runtime.getRuntime().exit(-1);
+	private void frame() {
+		double t1 = GLFW.glfwGetTime();
+		drawContents(vg);
+		double t2 = GLFW.glfwGetTime();
+
+		try {
+			Thread.sleep((long) Math.max((1.0 / fps - (t2 - t1)) * 1000, 0));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public Main() {
+		boolean initSuccess = GLFW.glfwInit();
+		if (!initSuccess) {
+			throw new RuntimeException("GLFW initialization failed");
 		}
 		System.out.println("GLFW initialized");
 		
@@ -114,27 +90,33 @@ public class Main {
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
 		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, 1);
 
-		long window = GLFW.glfwCreateWindow(600, 400, "Cool life", 0, 0);
+		window = GLFW.glfwCreateWindow(600, 400, "Cool life", 0, 0);
 		if (window == 0) {
-			System.out.println("Window is NULL. Cancelling");
 			GLFW.glfwTerminate();
-			Runtime.getRuntime().exit(-1);
+			throw new RuntimeException("GLFW can't create a window");
 		}
 		
 		GLFW.glfwMakeContextCurrent(window);
 		if (!GL3W.init()) {
-			System.out.println("GL3W initialization failed");
-			Runtime.getRuntime().exit(-1);
+			GLFW.glfwTerminate();
+			throw new RuntimeException("GL3W initialization failed");
 		}
 		System.out.println("GL version: " + GL3W.getGLVersionMajor() + "." + GL3W.getGLVersionMinor());
 		System.out.println("GLSL version: " + GL3W.getGLSLVersionMajor() + "." + GL3W.getGLSLVersionMinor());
 
+		vg = firststep.nvg.NVG.create(firststep.nvg.NVG.NVG_ANTIALIAS | firststep.nvg.NVG.NVG_STENCIL_STROKES | firststep.nvg.NVG.NVG_DEBUG);
+	}
+	
+	public void loop() {
 		while (!GLFW.glfwWindowShouldClose(window))
 		{
+			frame();
 			GLFW.glfwPollEvents();
 		}
-
-		
-		//start();
+	}
+	
+	public static void main(String... args) {
+		Main main = new Main();
+		main.loop();
 	}
 }

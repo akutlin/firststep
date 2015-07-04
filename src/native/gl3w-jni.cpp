@@ -79,4 +79,20 @@ extern "C"
 		getGLSLVersion(&major, &minor);
 		return minor;
 	}
+
+	// Some OpenGL 3 bindings
+
+	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_glViewport(JNIEnv * env, jclass clz, jint x, jint y, jint width, jint height)
+	{
+		glViewport(x, y, width, height);
+	}
+	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_glClearColor(JNIEnv * env, jclass clz, jfloat red, jfloat green, jfloat blue, jfloat alpha)
+	{
+		glClearColor(red, green, blue, alpha);
+	}
+	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_glClear(JNIEnv * env, jclass clz, jlong mask)
+	{
+		glClear(mask);
+	}
+
 }
