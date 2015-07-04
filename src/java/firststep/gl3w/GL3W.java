@@ -1,6 +1,10 @@
 package firststep.gl3w;
 
 public class GL3W {
+	static {
+		System.loadLibrary("firststep");
+	}
+
 	private GL3W() { }
 	
 	public static long GL_DEPTH_BUFFER_BIT = 0x00000100L;

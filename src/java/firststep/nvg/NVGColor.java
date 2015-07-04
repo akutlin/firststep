@@ -4,11 +4,19 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-public class Color {
+public class NVGColor {
 	
 	FloatBuffer buff;  // must be called buff see void* getBuffPtr(JNIEnv *e, jobject jo)
 	
-	public Color(float r, float g, float b, float a) {
+	public NVGColor(int r, int g, int b) {
+		this(r, g, b, 255);
+	}
+
+	public NVGColor(int r, int g, int b, int a) {
+		this((float)r / 255, (float)g / 255, (float)b / 255, (float)a / 255);
+	}
+	
+	public NVGColor(float r, float g, float b, float a) {
 		buff = ByteBuffer.allocateDirect(16)
 					.order(ByteOrder.nativeOrder()).asFloatBuffer();
 		buff.put(0, r);
@@ -17,7 +25,7 @@ public class Color {
 		buff.put(3, a);
 	}
 	
-	public Color() {
+	public NVGColor() {
 		this(0f,0f,0f,1f);
 	}
 	

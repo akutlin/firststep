@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GLFW {
+	static {
+		System.loadLibrary("firststep");
+	}
+
 	public static final int GLFW_VERSION_MAJOR = 3;
 	public static final int GLFW_VERSION_MINOR = 0;
 	public static final int GLFW_VERSION_REVISION = 0;
@@ -290,15 +294,15 @@ public class GLFW {
 	public static native int glfwGetMonitorPhysicalHeight(long monitor);
 	public static native String glfwGetMonitorName(long monitor);
 	
-	public static List<GlfwVideoMode> glfwGetVideoModes(long monitor) {
+	public static List<GLFWVideoMode> glfwGetVideoModes(long monitor) {
 		int[] buffer = new int[5 * 256]; // 256 video modes are enough for everyone...
 		int numModes = glfwGetVideoModesJni(monitor, buffer);
 		if (numModes > 256) {
 			numModes = 256;
 		}
-		List<GlfwVideoMode> modes = new ArrayList<GlfwVideoMode>();
+		List<GLFWVideoMode> modes = new ArrayList<GLFWVideoMode>();
 		for(int i = 0, j = 0; i < numModes; i++) {
-			GlfwVideoMode mode = new GlfwVideoMode();
+			GLFWVideoMode mode = new GLFWVideoMode();
 			mode.width = buffer[j++];
 			mode.height = buffer[j++];
 			mode.redBits = buffer[j++];
@@ -311,10 +315,10 @@ public class GLFW {
 	
 	private static native int glfwGetVideoModesJni(long monitor, int[] modes);
 	
-	public static GlfwVideoMode glfwGetVideoMode(long monitor) {
+	public static GLFWVideoMode glfwGetVideoMode(long monitor) {
 		int[] buffer = new int[5];
 		glfwGetVideoModeJni(monitor, buffer);
-		GlfwVideoMode mode = new GlfwVideoMode();
+		GLFWVideoMode mode = new GLFWVideoMode();
 		mode.width = buffer[0];
 		mode.height = buffer[1];
 		mode.redBits = buffer[2];
