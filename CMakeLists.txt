@@ -1,55 +1,38 @@
 cmake_minimum_required (VERSION 2.8)
 
-set(PROJNAME "CoolLife")
+set(PROJNAME "firststep")
 
-set(ALLRESOURCES 
-	"fonts/Walkway_Black.ttf"
-	"fonts/Walkway_Bold.ttf"
-)
+file(GLOB SOURCES_C "${CMAKE_CURRENT_SOURCE_DIR}/src/native/*.c")
+file(GLOB SOURCES_CPP "${CMAKE_CURRENT_SOURCE_DIR}/src/native/*.cpp")
 
 set(SOURCES
-	"src/clock.c" 
-	"src/gl3w.cpp"
+	${SOURCES_C} 
+	${SOURCES_CPP}
 	"${CMAKE_CURRENT_SOURCE_DIR}/nanovg/src/nanovg.c" 
 )
 
 project (${PROJNAME})
 
-IF(APPLE)
-	add_executable(
-		${PROJNAME}
-		MACOSX_BUNDLE 
-		${SOURCES}
-		${ALLRESOURCES}
-	)
-	
-	set_target_properties(${PROJNAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST 
-		"${CMAKE_CURRENT_SOURCE_DIR}/MacOSXBundleInfo.plist.in"
-	)
-	
-	set_source_files_properties(
-    		${ALLRESOURCES}
-	    PROPERTIES
-    		MACOSX_PACKAGE_LOCATION Resources/fonts
-  	)
-  	set(MACOSX_BUNDLE_BUNDLE_NAME "Alpha Clock")
-  	
-ELSE()
-	add_executable(
-		${PROJNAME} 
-		${SOURCES} 
-		${ALLRESOURCES}
-	)
+# Native library
 
-	file(COPY ${ALLRESOURCES} DESTINATION "fonts/")
-ENDIF(APPLE)
+find_package(JNI)
+
+add_library(
+	${PROJNAME}
+	SHARED 
+	${SOURCES}
+)
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/src 
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/nanovg/src
 	${CMAKE_CURRENT_SOURCE_DIR}/glfw/include
+	${JAVA_INCLUDE_PATH}
+	${JAVA_INCLUDE_PATH2}
 )
+
+SET(MACOSX_RPATH FALSE)
 
 SET(GLFW_BUILD_DOCS OFF CACHE BOOL "build docs")
 SET(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "build examples")
@@ -69,3 +52,24 @@ ENDIF()
 
 target_link_libraries(${PROJNAME} glfw ${GLFW_LIBRARIES} ${EXTRA_LIBS})
 
+
+# Java bindings
+
+set(JARNAME "firststep-java")
+
+find_package(Java REQUIRED)
+include(UseJava)
+
+set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.7" "-target" "1.7")
+
+file(GLOB_RECURSE SOURCES_JAVA "${CMAKE_CURRENT_SOURCE_DIR}/src/java/*.java")
+
+add_jar(${JARNAME} ${SOURCES_JAVA})
+
+get_target_property(_jarFile ${JARNAME} JAR_FILE)
+get_target_property(_classDir ${JARNAME} CLASSDIR)
+
+message(STATUS "Jar file ${_jarFile}")
+message(STATUS "Class compiled to ${_classDir}")
+
+add_dependencies(${PROJNAME} ${JARNAME})
