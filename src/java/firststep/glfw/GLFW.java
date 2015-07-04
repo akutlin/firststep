@@ -264,7 +264,7 @@ public class GLFW {
 	public static final int GLFW_CONNECTED = 0x00061000;
 	public static final int GLFW_DISCONNECTED = 0x00061001;
 
-	private static GLFWCallback callback = null;
+	private static Callback callback = null;
 
 	public static boolean glfwInit() {
 		return glfwInitJni();
@@ -294,15 +294,15 @@ public class GLFW {
 	public static native int glfwGetMonitorPhysicalHeight(long monitor);
 	public static native String glfwGetMonitorName(long monitor);
 	
-	public static List<GLFWVideoMode> glfwGetVideoModes(long monitor) {
+	public static List<VideoMode> glfwGetVideoModes(long monitor) {
 		int[] buffer = new int[5 * 256]; // 256 video modes are enough for everyone...
 		int numModes = glfwGetVideoModesJni(monitor, buffer);
 		if (numModes > 256) {
 			numModes = 256;
 		}
-		List<GLFWVideoMode> modes = new ArrayList<GLFWVideoMode>();
+		List<VideoMode> modes = new ArrayList<VideoMode>();
 		for(int i = 0, j = 0; i < numModes; i++) {
-			GLFWVideoMode mode = new GLFWVideoMode();
+			VideoMode mode = new VideoMode();
 			mode.width = buffer[j++];
 			mode.height = buffer[j++];
 			mode.redBits = buffer[j++];
@@ -315,10 +315,10 @@ public class GLFW {
 	
 	private static native int glfwGetVideoModesJni(long monitor, int[] modes);
 	
-	public static GLFWVideoMode glfwGetVideoMode(long monitor) {
+	public static VideoMode glfwGetVideoMode(long monitor) {
 		int[] buffer = new int[5];
 		glfwGetVideoModeJni(monitor, buffer);
-		GLFWVideoMode mode = new GLFWVideoMode();
+		VideoMode mode = new VideoMode();
 		mode.width = buffer[0];
 		mode.height = buffer[1];
 		mode.redBits = buffer[2];
@@ -358,25 +358,25 @@ public class GLFW {
 	public static native long glfwGetWindowMonitor(long window);
 	
 	/**
-	 * Sets the {@link GLFWCallback} that will get invoked by
+	 * Sets the {@link Callback} that will get invoked by
 	 * various events. Replaces the single callback functions of GLFW
 	 * @param callback the callback or null
 	 */
-	public static void glfwSetCallback(GLFWCallback callback) {
+	public static void glfwSetCallback(Callback callback) {
 		glfwSetCallbackJni(callback);
 	}
 
-	public static native void glfwSetCallbackJni(GLFWCallback javaCallback);
+	public static native void glfwSetCallbackJni(Callback javaCallback);
 	public static void glfwPollEvents() {
 		glfwPollEventsJni(callback);
 	}
 	
-	private static native void glfwPollEventsJni(GLFWCallback javaCallback);
+	private static native void glfwPollEventsJni(Callback javaCallback);
 	public static void glfwWaitEvents() {
 		glfwWaitEventsJni(callback);
 	}
 	
-	private static native void glfwWaitEventsJni(GLFWCallback javaCallback);
+	private static native void glfwWaitEventsJni(Callback javaCallback);
 	public static native int glfwGetInputMode(long window, int mode);
 	public static native void glfwSetInputMode(long window, int mode, int value);
 	public static native boolean glfwGetKey(long window, int key);

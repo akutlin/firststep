@@ -1,6 +1,6 @@
 package firststep.glfw;
 
-public class GLFWCallbackAdapter implements GLFWCallback {
+public class CallbackAdapter implements Callback {
 
 	@Override
 	public void error(int error, String description) {

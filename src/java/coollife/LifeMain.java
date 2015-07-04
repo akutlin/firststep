@@ -2,9 +2,9 @@ package coollife;
 
 import firststep.gl3w.GL3W;
 import firststep.glfw.GLFW;
-import firststep.glfw.GLFWCallback;
-import firststep.glfw.GLFWCallbackAdapter;
-import firststep.nvg.NVGColor;
+import firststep.glfw.Callback;
+import firststep.glfw.CallbackAdapter;
+import firststep.nvg.Color;
 import firststep.nvg.NVG;
 
 public class LifeMain {
@@ -20,7 +20,7 @@ public class LifeMain {
 
 	private Cells field;
 	
-	private GLFWCallback cb = new GLFWCallbackAdapter() {
+	private Callback cb = new CallbackAdapter() {
 		
 		@Override
 		public void windowSize(long window, int width, int height) {
@@ -112,7 +112,7 @@ public class LifeMain {
 	    
 	    // Painting dark cells
         NVG.beginPath(vg);
-        NVG.fillColor(vg, new NVGColor(0, 0, 0));
+        NVG.fillColor(vg, new Color(0, 0, 0));
 	    for (int i = 0; i < field.getWidth(); i++)
 	    for (int j = 0; j < field.getHeight(); j++)
 	    {
@@ -125,7 +125,7 @@ public class LifeMain {
 
 	    // Painting light cells
         NVG.beginPath(vg);
-        NVG.fillColor(vg, new NVGColor(192, 192, 192));
+        NVG.fillColor(vg, new Color(192, 192, 192));
 	    for (int i = 0; i < field.getWidth(); i++)
 	    for (int j = 0; j < field.getHeight(); j++)
 	    {
@@ -139,7 +139,7 @@ public class LifeMain {
 	    
 	    // Painting lines between cells
         NVG.beginPath(vg);
-        NVG.strokeColor(vg, new NVGColor(64, 64, 64, 255));
+        NVG.strokeColor(vg, new Color(64, 64, 64, 255));
         if (k > 8)
         {
 		    for (int i = 0; i < field.getWidth(); i++)
@@ -152,7 +152,7 @@ public class LifeMain {
 	    
 	    if (mouseI >= 0 && mouseI < field.getWidth() && mouseJ >= 0 && mouseJ < field.getHeight())
 	    {
-	        NVG.fillColor(vg, new NVGColor(255, 255, 255, 64));
+	        NVG.fillColor(vg, new Color(255, 255, 255, 64));
 	        NVG.beginPath(vg);
 	        NVG.rect(vg, x0 + mouseI * k, y0 + mouseJ * k, k, k);
 	        NVG.fill(vg);

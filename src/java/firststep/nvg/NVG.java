@@ -89,15 +89,15 @@ public class NVG {
 
 	static native void __setTransform(long ctx, Transform t);
 
-	static native void __imagePattern(long ctx, NVGPaint pnt, float ox, float oy, float ex, float ey,
+	static native void __imagePattern(long ctx, Paint pnt, float ox, float oy, float ex, float ey,
 												float angle, int image, float alpha);
-	static native void __linearGradient(long ctx, NVGPaint pnt, float sx, float sy, float ex, float ey, 
-												NVGColor icol, NVGColor ocol);
-	static native void __boxGradient(long ctx, NVGPaint pnt, float x, float y, float w, float h,
-												float r, float f, NVGColor icol, NVGColor ocol);
+	static native void __linearGradient(long ctx, Paint pnt, float sx, float sy, float ex, float ey, 
+												Color icol, Color ocol);
+	static native void __boxGradient(long ctx, Paint pnt, float x, float y, float w, float h,
+												float r, float f, Color icol, Color ocol);
 						
-	static native void __radialGradient(long ctx, NVGPaint pnt, float cx, float cy, float inr, float outr,
-												NVGColor icol, NVGColor ocol);
+	static native void __radialGradient(long ctx, Paint pnt, float cx, float cy, float inr, float outr,
+												Color icol, Color ocol);
   
     static public native long test(int a);
 	
@@ -161,9 +161,9 @@ public class NVG {
 	public static native void stroke(long ctx);
 	public static native void moveTo(long ctx, float x, float y);
 	public static native void lineTo(long ctx, float x, float y);
-	public static native void strokeColor(long ctx, NVGColor col);
+	public static native void strokeColor(long ctx, Color col);
 	public static native void strokeColorf(long ctx, float r, float g, float b, float a);
-	public static native void fillColor(long ctx, NVGColor col);
+	public static native void fillColor(long ctx, Color col);
 	public static native void fillColorf(long ctx, float r, float g, float b, float a);
 	public static native void strokeWidth(long ctx, float size);
 	public static native void rect(long ctx, float x, float y, float w, float h);
@@ -181,7 +181,7 @@ public class NVG {
 	public static native void roundedRect(long ctx, float x, float y, float w, float h, float r);
 	
 
-	public static native void fillPaint(long ctx, NVGPaint paint);
+	public static native void fillPaint(long ctx, Paint paint);
 	
 	public static native void scissor(long ctx, float x, float y, float w, float h);
 	public static native void intersectScissor(long ctx, float x, float y, float w, float h);
@@ -196,7 +196,7 @@ public class NVG {
 	public static native void resetTransform(long ctx);
 	public static native void translate(long ctx, float x, float y);
 	public static native void scale(long ctx, float x, float y);
-	public static native void strokePaint(long ctx, NVGPaint paint);
+	public static native void strokePaint(long ctx, Paint paint);
 	public static native void miterLimit(long ctx, float limit);	// no idea what this does....
 	public static native void globalAlpha(long ctx, float alpha);
 	public static native void transform(long ctx, float a, float b, float c, float d, float e, float f);

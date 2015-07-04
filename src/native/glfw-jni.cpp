@@ -159,9 +159,9 @@ extern "C"
 		env->GetJavaVM(&staticVM);
 		createTLS();
 
-		jclass exception = env->FindClass("firststep/glfw/GLFWException");
+		jclass exception = env->FindClass("firststep/glfw/Exception");
 
-		jclass callbackClass = env->FindClass("firststep/glfw/GLFWCallback");
+		jclass callbackClass = env->FindClass("firststep/glfw/Callback");
 		if(!callbackClass) {
 			env->ThrowNew(exception, "Couldn't find class GLFWCallback");
 			return false;
@@ -380,12 +380,12 @@ extern "C"
 	}
 
 	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwGetGammaRamp(JNIEnv* env, jclass clazz) {
-		jclass exception = env->FindClass("firststep/glfw/GLFWException");
+		jclass exception = env->FindClass("firststep/glfw/Exception");
 		env->ThrowNew(exception, "Unimplemented");
 	}
 
 	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetGammaRamp(JNIEnv* env, jclass clazz) {
-		jclass exception = env->FindClass("firststep/glfw/GLFWException");
+		jclass exception = env->FindClass("firststep/glfw/Exception");
 		env->ThrowNew(exception, "Unimplemented");
 	}
 

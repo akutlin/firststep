@@ -1,6 +1,6 @@
 package firststep.glfw;
 
-public class GLFWVideoMode {
+public class VideoMode {
 	public int width;
 	public int height;
 	public int redBits;

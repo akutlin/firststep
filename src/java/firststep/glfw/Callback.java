@@ -6,7 +6,7 @@ package firststep.glfw;
  * @author mzechner
  *
  */
-public interface GLFWCallback {
+public interface Callback {
 	/**
 	 * Called in case of an error, on the thread
 	 * the error was generated on.
