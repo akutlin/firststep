@@ -14,11 +14,11 @@ public class LifeMain {
 	private long window; 
 	private long vg;
 	private float pxRatio;
-	private double fps = 25.0;
+	private double fps = 50.0;
 	private int mouseI, mouseJ;
 	private boolean isPaused;
 
-	private Cells field;
+	private Field field;
 	
 	private Callback cb = new CallbackAdapter() {
 		private boolean isDown = false;
@@ -54,7 +54,7 @@ public class LifeMain {
 		    if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_PRESS)
 		    {
 		    	isDown = true;
-		        if (!field.getCell(mouseI, mouseJ))
+		        /*if (!field.getCell(mouseI, mouseJ))
 		        {
 		        	field.setCell(mouseI, mouseJ, true);
 		        	clickedColor = true;
@@ -63,7 +63,9 @@ public class LifeMain {
 		        {
 		        	field.setCell(mouseI, mouseJ, false);
 		        	clickedColor = false;
-		        }
+		        }*/
+		    	
+		    	field.getCell(mouseI, mouseJ).setAnimals(field.getCell(mouseI, mouseJ).getAnimals() + 50);
 		    }
 		    
 		    if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
@@ -73,12 +75,12 @@ public class LifeMain {
 		
 		public void cursorPos(long window, double x, double y) {
 			if (isDown) {
-	        	field.setCell(mouseI, mouseJ, clickedColor);
+		    	field.getCell(mouseI, mouseJ).setAnimals(field.getCell(mouseI, mouseJ).getAnimals() + 50);
 			}
 		}
 	};
 	
-	private float calcScale(int winWidth, int winHeight)
+	private int calcScale(int winWidth, int winHeight)
 	{
 	    float wpw = (float)field.getWidth() / winWidth;
 	    float hph = (float)field.getHeight() / winHeight;
@@ -91,7 +93,7 @@ public class LifeMain {
 	    {
 	        k = 1.0f / hph;
 	    }
-	    return k;
+	    return (int)k;
 	}
 
 	private void cellUnderMouse(int winWidth, int winHeight)
@@ -126,45 +128,35 @@ public class LifeMain {
 	    float x0 = winWidth / 2 - (field.getWidth() * k / 2);
 	    float y0 = winHeight / 2 - (field.getHeight() * k / 2);
 	    
-	    // Painting dark cells
-        NVG.beginPath(vg);
-        NVG.fillColor(vg, new Color(0, 0, 0));
+	    // Painting cells
 	    for (int i = 0; i < field.getWidth(); i++)
 	    for (int j = 0; j < field.getHeight(); j++)
 	    {
-	        if (!field.getCell(i, j))
-	        {
-		        NVG.rect(vg, x0 + i * k, y0 + j * k, k, k);
-	        }
+            NVG.beginPath(vg);
+            NVG.fillColor(vg, 
+            		new Color(
+            				0, 
+            				(int)(255 * (Math.log((float)field.getCell(i, j).getPlants()) / 7)), 
+            				(int)(255 * (Math.log((float)field.getCell(i, j).getAnimals()) / 5))
+            		)
+            );
+	        NVG.rect(vg, x0 + i * k, y0 + j * k, k, k);
+	        NVG.fill(vg);
 	    }
-        NVG.fill(vg);
-
-	    // Painting light cells
-        NVG.beginPath(vg);
-        NVG.fillColor(vg, new Color(192, 192, 192));
-	    for (int i = 0; i < field.getWidth(); i++)
-	    for (int j = 0; j < field.getHeight(); j++)
-	    {
-	        if (field.getCell(i, j))
-	        {
-		        NVG.rect(vg, x0 + i * k, y0 + j * k, k, k);
-	        }
-	    }
-        NVG.fill(vg);
-
 	    
 	    // Painting lines between cells
-        NVG.beginPath(vg);
-        NVG.strokeColor(vg, new Color(64, 64, 64, 255));
-        if (k > 8)
-        {
-		    for (int i = 0; i < field.getWidth(); i++)
-		    for (int j = 0; j < field.getHeight(); j++)
-		    {
-		        NVG.rect(vg, x0 + i * k, y0 + j * k, k, k);
-		    }
+        if (k > 8) {
+	        NVG.beginPath(vg);
+	        NVG.strokeColor(vg, new Color(64, 64, 64, 128));
+	        {
+			    for (int i = 0; i < field.getWidth(); i++)
+			    for (int j = 0; j < field.getHeight(); j++)
+			    {
+			        NVG.rect(vg, x0 + i * k, y0 + j * k, k, k);
+			    }
+	        }
+	        NVG.stroke(vg);
         }
-        NVG.stroke(vg);
 	    
 	    if (mouseI >= 0 && mouseI < field.getWidth() && mouseJ >= 0 && mouseJ < field.getHeight())
 	    {
@@ -244,7 +236,7 @@ public class LifeMain {
 
 		vg = NVG.create(firststep.nvg.NVG.NVG_ANTIALIAS | firststep.nvg.NVG.NVG_STENCIL_STROKES | firststep.nvg.NVG.NVG_DEBUG);
 		
-		field = new Cells(100, 70);
+		field = new Field(120, 80);
 	}
 	
 	public void loop() {
@@ -252,8 +244,10 @@ public class LifeMain {
 		while (!GLFW.glfwWindowShouldClose(window))
 		{
 			frame();
-			if (!isPaused && frameIndex % 2 == 0) {
-				field = LifeEngine.turn(field);
+			if (!isPaused) {
+				//field = LifeEngine.turn(field);
+				if (frameIndex % 2 == 0) PlantGrowingEngine.turnField(field);
+				AnimalGrowingEngine.turnField(field);
 			}
 			GLFW.glfwPollEvents();
 			frameIndex ++;
