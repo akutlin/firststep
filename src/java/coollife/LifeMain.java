@@ -14,7 +14,7 @@ public class LifeMain {
 	private long window; 
 	private long vg;
 	private float pxRatio;
-	private double fps = 50.0;
+	private double fps = 25.0;
 	private int mouseI, mouseJ;
 	private boolean isPaused;
 

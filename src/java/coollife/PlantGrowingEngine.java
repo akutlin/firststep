@@ -1,7 +1,7 @@
 package coollife;
 
 public class PlantGrowingEngine {
-	private static final double DISPERSING_PERCENT = 0.1;
+	private static final double DISPERSING_PERCENT = 0.01;
 	
 	public static void turnField(Field cells) {
 		for (int i = 0; i < cells.getWidth(); i++)

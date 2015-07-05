@@ -14,14 +14,14 @@ public class AnimalGrowingEngine {
 			for (int k = 0; k < animalsCountOld; k++) {
 				
 				// Eats plant for life
-				if (plantsCount > 0) {
-					plantsCount -= 0.2;
+				if (Math.random() < plantsCount * cell.getAnimalSize()) {
+					plantsCount -= 0.22;
 	
 					// Searches for someone to breed child
 					if (Math.random() < cell.getAnimalSize() * animalsCountOld) animalsCount++;
 				} else {
 					// Migrate or starve
-					double migrationFactor = 0.3;
+					double migrationFactor = 0.275;
 					boolean migrate = Math.random() < migrationFactor;
 					
 					if (migrate) {

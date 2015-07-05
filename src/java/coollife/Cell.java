@@ -2,7 +2,7 @@ package coollife;
 
 public class Cell {
 	private static final int PLANT_FOOD_MAX = 500;
-	private static final double ANIMAL_SIZE = 0.005;
+	private static final double ANIMAL_SIZE = 0.015;
 	
 	private int plantFood = 500;
 	private double plants = 1;
