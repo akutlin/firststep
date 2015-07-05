@@ -14,7 +14,7 @@ public class LifeMain {
 	private long window; 
 	private long vg;
 	private float pxRatio;
-	private double fps = 25.0;
+	private double fps = 50.0;
 	private int mouseI, mouseJ;
 	private boolean isPaused;
 
@@ -65,7 +65,7 @@ public class LifeMain {
 		        	clickedColor = false;
 		        }*/
 		    	
-		    	field.getCell(mouseI, mouseJ).setAnimals(field.getCell(mouseI, mouseJ).getAnimals() + 50);
+		    	field.getCell(mouseI, mouseJ).setAnimals(field.getCell(mouseI, mouseJ).getAnimals() + 100);
 		    }
 		    
 		    if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
@@ -75,7 +75,7 @@ public class LifeMain {
 		
 		public void cursorPos(long window, double x, double y) {
 			if (isDown) {
-		    	field.getCell(mouseI, mouseJ).setAnimals(field.getCell(mouseI, mouseJ).getAnimals() + 50);
+		    	field.getCell(mouseI, mouseJ).setAnimals(field.getCell(mouseI, mouseJ).getAnimals() + 100);
 			}
 		}
 	};
@@ -136,8 +136,8 @@ public class LifeMain {
             NVG.fillColor(vg, 
             		new Color(
             				0, 
-            				(int)(255 * (Math.log((float)field.getCell(i, j).getPlants()) / 7)), 
-            				(int)(255 * (Math.log((float)field.getCell(i, j).getAnimals()) / 5))
+            				(int)(255 * (Math.log((float)field.getCell(i, j).getPlants()) / 5)), 
+            				(int)(255 * (Math.log((float)field.getCell(i, j).getAnimals()) / 2))
             		)
             );
 	        NVG.rect(vg, x0 + i * k, y0 + j * k, k, k);
@@ -241,13 +241,16 @@ public class LifeMain {
 	
 	public void loop() {
 		int frameIndex = 0;
+		
+		AnimalGrowingEngine animalGrowingEngine = new AnimalGrowingEngine(new MaximumFoodMigrationTactic());
+		
 		while (!GLFW.glfwWindowShouldClose(window))
 		{
 			frame();
 			if (!isPaused) {
 				//field = LifeEngine.turn(field);
-				if (frameIndex % 2 == 0) PlantGrowingEngine.turnField(field);
-				AnimalGrowingEngine.turnField(field);
+				/*if (frameIndex % 2 == 0)*/ PlantGrowingEngine.turnField(field);
+				animalGrowingEngine.turnField(field);
 			}
 			GLFW.glfwPollEvents();
 			frameIndex ++;

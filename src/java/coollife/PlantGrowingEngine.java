@@ -49,12 +49,12 @@ public class PlantGrowingEngine {
 			// Takes food for seeds
 			if ((Math.random() * plantFoodMax) < plantFood) foodTaken++;
 
-			plantFood -= foodTaken;
-			if (foodTaken == 0) plantsCount--;
-			else if (foodTaken == 2) plantsCount++;
+			plantFood -= foodTaken / 2;
+			if (foodTaken == 0) plantsCount -= 0.5;
+			else if (foodTaken == 2) plantsCount += 0.5;
 		}
 		
-		plantFood += 70;
+		plantFood += 20;
 		if (plantFood > plantFoodMax) plantFood = plantFoodMax;
 		
 		cell.setPlantFood(plantFood);
