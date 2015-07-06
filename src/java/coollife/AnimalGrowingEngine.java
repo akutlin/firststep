@@ -23,6 +23,16 @@ public class AnimalGrowingEngine {
 			for (int j = j1; j < j2; j++) {
 				Cell cell = cells.getCell(i, j);
 				
+				Cell[] sideCells = new Cell[8];
+				sideCells[Direction.N.getIndex()] = cells.getCell(i, j - 1);
+				sideCells[Direction.NE.getIndex()] = cells.getCell(i + 1, j - 1);
+				sideCells[Direction.E.getIndex()] = cells.getCell(i + 1, j);
+				sideCells[Direction.SE.getIndex()] = cells.getCell(i + 1, j + 1);
+				sideCells[Direction.S.getIndex()] = cells.getCell(i, j + 1);
+				sideCells[Direction.SW.getIndex()] = cells.getCell(i - 1, j + 1);
+				sideCells[Direction.W.getIndex()] = cells.getCell(i - 1, j);
+				sideCells[Direction.NW.getIndex()] = cells.getCell(i - 1, j - 1);
+
 				double plantsCount = cell.getPlants();
 				int animalsCount = cell.getAnimals();
 				
@@ -33,26 +43,27 @@ public class AnimalGrowingEngine {
 					if (Math.random() < plantsCount * cell.getAnimalSize()) {
 						plantsCount -= 0.75;
 		
-						// Searches for someone to breed child
-						if (Math.random() < cell.getAnimalSize() * animalsCountOld) animalsCount++;
+						// Search for someone to breed a child
+						for (int si = 0; si < sideCells.length; si++) {
+							if (Math.random() < sideCells[si].getAnimalSize() * animalsCountOld) {
+								animalsCount++;
+								break;
+							}
+						}
+						
+						if (Math.random() < cell.getAnimalSize() * animalsCountOld) {
+							animalsCount++;
+						}
+						
 					} else {
 						// Migrate or starve
 						double migrationFactor = cell.getAnimalSize() * 4;
 						boolean migrate = Math.random() < migrationFactor;
 						
 						if (migrate) {
-							Cell[] directions = new Cell[8];
-							directions[Direction.N.getIndex()] = cells.getCell(i, j - 1);
-							directions[Direction.NE.getIndex()] = cells.getCell(i + 1, j - 1);
-							directions[Direction.E.getIndex()] = cells.getCell(i + 1, j);
-							directions[Direction.SE.getIndex()] = cells.getCell(i + 1, j + 1);
-							directions[Direction.S.getIndex()] = cells.getCell(i, j + 1);
-							directions[Direction.SW.getIndex()] = cells.getCell(i - 1, j + 1);
-							directions[Direction.W.getIndex()] = cells.getCell(i - 1, j);
-							directions[Direction.NW.getIndex()] = cells.getCell(i - 1, j - 1);
 							
 							// Decide direction
-							Cell decidedDir = directions[migrationTactic.decideDirection(directions).getIndex()];
+							Cell decidedDir = sideCells[migrationTactic.decideDirection(sideCells).getIndex()];
 							decidedDir.setAnimals(decidedDir.getAnimals() + 1);
 							
 							animalsCount--;
@@ -64,7 +75,7 @@ public class AnimalGrowingEngine {
 				}
 				
 				// Natural death
-				animalsCount *= 0.95;
+				animalsCount *= 0.9;
 				
 				cell.setAnimals(animalsCount);
 				cell.setPlants(plantsCount);
