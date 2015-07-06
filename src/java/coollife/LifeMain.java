@@ -1,5 +1,6 @@
 package coollife;
 
+import firststep.os.GlobalConsts;
 import firststep.gl3w.GL3W;
 import firststep.glfw.GLFW;
 import firststep.glfw.Callback;
@@ -222,11 +223,21 @@ public class LifeMain {
 		
 		GLFW.glfwSetCallback(cb);
 		
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
-		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
-		
-		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
-		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, 1);
+		if (GlobalConsts.getPlatform() == GlobalConsts.Platform.OSX) {
+			// We initialize OpenGL 3.2 Core profile on OSX cause
+			// it is the only GL3 that Apple knows.
+			
+			GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
+			GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
+			
+			GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
+			GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, 1);
+		} else {
+			// On other platforms OpenGL 3.0 is sufficient for us.
+			
+			GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
+			GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);			
+		}
 
 		window = GLFW.glfwCreateWindow(600, 400, "Cool life", 0, 0);
 		if (window == 0) {

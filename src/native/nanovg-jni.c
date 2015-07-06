@@ -91,7 +91,7 @@ JNIEXPORT jlong JNICALL Java_firststep_nvg_NVG_test
 JNIEXPORT jlong JNICALL Java_firststep_nvg_NVG_create
   (JNIEnv *e, jclass c, jint flags)
 {
-	return (jlong)(long) nvgCreateGL3(flags);
+	return (jlong)(NVGcontext*) nvgCreateGL3(flags);
 }
 
 JNIEXPORT void JNICALL Java_firststep_nvg_NVG_beginFrame

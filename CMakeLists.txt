@@ -15,6 +15,11 @@ project (${PROJNAME})
 
 # Native library
 
+if(MINGW)
+	SET(CMAKE_SHARED_LIBRARY_PREFIX "")
+	SET(CMAKE_SHARED_MODULE_PREFIX "")
+endif (MINGW)
+
 find_package(JNI)
 
 add_library(
@@ -58,7 +63,7 @@ target_link_libraries(${PROJNAME} glfw ${GLFW_LIBRARIES} ${EXTRA_LIBS})
 set(JARNAME "firststep-java")
 
 find_package(Java REQUIRED)
-include(UseJava)
+include(cmake_patches/UseJavaCustom.cmake)
 
 set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.7" "-target" "1.7")
 
