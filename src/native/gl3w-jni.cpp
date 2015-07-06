@@ -47,33 +47,33 @@ void getGLSLVersion(int *major, int *minor)
 
 extern "C"
 {
-	JNIEXPORT jboolean JNICALL Java_firststep_gl3w_GL3W_init(JNIEnv * env, jclass clz)
+	JNIEXPORT jboolean JNICALL Java_firststep_internal_GL3W_init(JNIEnv * env, jclass clz)
 	{
 		return !gl3wInit();
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_getGLVersionMajor(JNIEnv * env, jclass clz)
+	JNIEXPORT jint JNICALL Java_firststep_internal_GL3W_getGLVersionMajor(JNIEnv * env, jclass clz)
 	{
 		int major, minor;
 		getGLVersion(&major, &minor);
 		return major;
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_getGLVersionMinor(JNIEnv * env, jclass clz)
+	JNIEXPORT jint JNICALL Java_firststep_internal_GL3W_getGLVersionMinor(JNIEnv * env, jclass clz)
 	{
 		int major, minor;
 		getGLVersion(&major, &minor);
 		return minor;
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_getGLSLVersionMajor(JNIEnv * env, jclass clz)
+	JNIEXPORT jint JNICALL Java_firststep_internal_GL3W_getGLSLVersionMajor(JNIEnv * env, jclass clz)
 	{
 		int major, minor;
 		getGLSLVersion(&major, &minor);
 		return major;
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_getGLSLVersionMinor(JNIEnv * env, jclass clz)
+	JNIEXPORT jint JNICALL Java_firststep_internal_GL3W_getGLSLVersionMinor(JNIEnv * env, jclass clz)
 	{
 		int major, minor;
 		getGLSLVersion(&major, &minor);
@@ -82,15 +82,15 @@ extern "C"
 
 	// Some OpenGL 3 bindings
 
-	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_glViewport(JNIEnv * env, jclass clz, jint x, jint y, jint width, jint height)
+	JNIEXPORT void JNICALL Java_firststep_internal_GL3W_glViewport(JNIEnv * env, jclass clz, jint x, jint y, jint width, jint height)
 	{
 		glViewport(x, y, width, height);
 	}
-	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_glClearColor(JNIEnv * env, jclass clz, jfloat red, jfloat green, jfloat blue, jfloat alpha)
+	JNIEXPORT void JNICALL Java_firststep_internal_GL3W_glClearColor(JNIEnv * env, jclass clz, jfloat red, jfloat green, jfloat blue, jfloat alpha)
 	{
 		glClearColor(red, green, blue, alpha);
 	}
-	JNIEXPORT jint JNICALL Java_firststep_gl3w_GL3W_glClear(JNIEnv * env, jclass clz, jlong mask)
+	JNIEXPORT void JNICALL Java_firststep_internal_GL3W_glClear(JNIEnv * env, jclass clz, jlong mask)
 	{
 		glClear(mask);
 	}

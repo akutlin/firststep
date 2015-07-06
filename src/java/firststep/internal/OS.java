@@ -1,6 +1,6 @@
-package firststep.os;
+package firststep.internal;
 
-public class GlobalConsts {
+public class OS {
 
 	public enum Platform {
 		WINDOWS, OSX, OTHER;

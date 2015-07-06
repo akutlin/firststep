@@ -154,16 +154,16 @@ extern "C"
 		}
 	}
 
-	JNIEXPORT jboolean JNICALL Java_firststep_glfw_GLFW_glfwInitJni(JNIEnv* env, jclass clazz) {
+	JNIEXPORT jboolean JNICALL Java_firststep_internal_GLFW_glfwInitJni(JNIEnv* env, jclass clazz) {
 
 		env->GetJavaVM(&staticVM);
 		createTLS();
 
-		jclass exception = env->FindClass("firststep/glfw/Exception");
+		jclass exception = env->FindClass("firststep/internal/GLFW$Exception");
 
-		jclass callbackClass = env->FindClass("firststep/glfw/Callback");
+		jclass callbackClass = env->FindClass("firststep/internal/GLFW$Callback");
 		if(!callbackClass) {
-			env->ThrowNew(exception, "Couldn't find class GLFWCallback");
+			env->ThrowNew(exception, "Couldn't find class GLFW.Callback");
 			return false;
 		}
 
@@ -260,7 +260,7 @@ extern "C"
 		return result;
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwTerminate(JNIEnv* env, jclass clazz) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwTerminate(JNIEnv* env, jclass clazz) {
 
 		if (callback) {
 			env->DeleteGlobalRef(callback);
@@ -270,11 +270,11 @@ extern "C"
 		glfwTerminate();
 	}
 
-	JNIEXPORT jstring JNICALL Java_firststep_glfw_GLFW_glfwGetVersionString(JNIEnv* env, jclass clazz) {
+	JNIEXPORT jstring JNICALL Java_firststep_internal_GLFW_glfwGetVersionString(JNIEnv* env, jclass clazz) {
 		return env->NewStringUTF(glfwGetVersionString());
 	}
 
-	static inline jint wrapped_Java_firststep_glfw_GLFW_glfwGetMonitorsJni(JNIEnv* env, jclass clazz, jlongArray obj_monitors, long long* monitors) {
+	static inline jint wrapped_Java_firststep_internal_GLFW_glfwGetMonitorsJni(JNIEnv* env, jclass clazz, jlongArray obj_monitors, long long* monitors) {
 
 		int count = 0;
 		GLFWmonitor** mons = glfwGetMonitors(&count);
@@ -287,21 +287,21 @@ extern "C"
 
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetMonitorsJni(JNIEnv* env, jclass clazz, jlongArray obj_monitors) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetMonitorsJni(JNIEnv* env, jclass clazz, jlongArray obj_monitors) {
 		long long* monitors = (long long*)env->GetPrimitiveArrayCritical(obj_monitors, 0);
 
-		jint JNI_returnValue = wrapped_Java_firststep_glfw_GLFW_glfwGetMonitorsJni(env, clazz, obj_monitors, monitors);
+		jint JNI_returnValue = wrapped_Java_firststep_internal_GLFW_glfwGetMonitorsJni(env, clazz, obj_monitors, monitors);
 
 		env->ReleasePrimitiveArrayCritical(obj_monitors, monitors, 0);
 
 		return JNI_returnValue;
 	}
 
-	JNIEXPORT jlong JNICALL Java_firststep_glfw_GLFW_glfwGetPrimaryMonitor(JNIEnv* env, jclass clazz) {
+	JNIEXPORT jlong JNICALL Java_firststep_internal_GLFW_glfwGetPrimaryMonitor(JNIEnv* env, jclass clazz) {
 		return (jlong)glfwGetPrimaryMonitor();
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetMonitorX(JNIEnv* env, jclass clazz, jlong monitor) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetMonitorX(JNIEnv* env, jclass clazz, jlong monitor) {
 
 		int x = 0;
 		int y = 0;
@@ -310,14 +310,14 @@ extern "C"
 
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetMonitorY(JNIEnv* env, jclass clazz, jlong monitor) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetMonitorY(JNIEnv* env, jclass clazz, jlong monitor) {
 		int x = 0;
 		int y = 0;
 		glfwGetMonitorPos((GLFWmonitor*)monitor, &x, &y);
 		return y;
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetMonitorPhysicalWidth(JNIEnv* env, jclass clazz, jlong monitor) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetMonitorPhysicalWidth(JNIEnv* env, jclass clazz, jlong monitor) {
 
 		int width = 0;
 		int height = 0;
@@ -325,18 +325,18 @@ extern "C"
 		return width;
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetMonitorPhysicalHeight(JNIEnv* env, jclass clazz, jlong monitor) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetMonitorPhysicalHeight(JNIEnv* env, jclass clazz, jlong monitor) {
 		int width = 0;
 		int height = 0;
 		glfwGetMonitorPhysicalSize((GLFWmonitor*)monitor, &width, &height);
 		return height;
 	}
 
-	JNIEXPORT jstring JNICALL Java_firststep_glfw_GLFW_glfwGetMonitorName(JNIEnv* env, jclass clazz, jlong monitor) {
+	JNIEXPORT jstring JNICALL Java_firststep_internal_GLFW_glfwGetMonitorName(JNIEnv* env, jclass clazz, jlong monitor) {
 		return env->NewStringUTF(glfwGetMonitorName((GLFWmonitor*)monitor));
 	}
 
-	static inline jint wrapped_Java_firststep_glfw_GLFW_glfwGetVideoModesJni(JNIEnv* env, jclass clazz, jlong monitor, jintArray obj_modes, int* modes) {
+	static inline jint wrapped_Java_firststep_internal_GLFW_glfwGetVideoModesJni(JNIEnv* env, jclass clazz, jlong monitor, jintArray obj_modes, int* modes) {
 
 		int numModes = 0;
 		const GLFWvidmode* vidModes = glfwGetVideoModes((GLFWmonitor*)monitor, &numModes);
@@ -351,17 +351,17 @@ extern "C"
 
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetVideoModesJni(JNIEnv* env, jclass clazz, jlong monitor, jintArray obj_modes) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetVideoModesJni(JNIEnv* env, jclass clazz, jlong monitor, jintArray obj_modes) {
 		int* modes = (int*)env->GetPrimitiveArrayCritical(obj_modes, 0);
 
-		jint JNI_returnValue = wrapped_Java_firststep_glfw_GLFW_glfwGetVideoModesJni(env, clazz, monitor, obj_modes, modes);
+		jint JNI_returnValue = wrapped_Java_firststep_internal_GLFW_glfwGetVideoModesJni(env, clazz, monitor, obj_modes, modes);
 
 		env->ReleasePrimitiveArrayCritical(obj_modes, modes, 0);
 
 		return JNI_returnValue;
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwGetVideoModeJni(JNIEnv* env, jclass clazz, jlong monitor, jintArray obj_buffer) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwGetVideoModeJni(JNIEnv* env, jclass clazz, jlong monitor, jintArray obj_buffer) {
 		int* buffer = (int*)env->GetPrimitiveArrayCritical(obj_buffer, 0);
 
 		const GLFWvidmode* mode = glfwGetVideoMode((GLFWmonitor*)monitor);
@@ -375,29 +375,29 @@ extern "C"
 
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetGamma(JNIEnv* env, jclass clazz, jlong monitor, jfloat gamma) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetGamma(JNIEnv* env, jclass clazz, jlong monitor, jfloat gamma) {
 		glfwSetGamma((GLFWmonitor*)monitor, gamma);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwGetGammaRamp(JNIEnv* env, jclass clazz) {
-		jclass exception = env->FindClass("firststep/glfw/Exception");
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwGetGammaRamp(JNIEnv* env, jclass clazz) {
+		jclass exception = env->FindClass("firststep/internal/GLFW$Exception");
 		env->ThrowNew(exception, "Unimplemented");
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetGammaRamp(JNIEnv* env, jclass clazz) {
-		jclass exception = env->FindClass("firststep/glfw/Exception");
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetGammaRamp(JNIEnv* env, jclass clazz) {
+		jclass exception = env->FindClass("firststep/internal/GLFW$Exception");
 		env->ThrowNew(exception, "Unimplemented");
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwDefaultWindowHints(JNIEnv* env, jclass clazz) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwDefaultWindowHints(JNIEnv* env, jclass clazz) {
 		glfwDefaultWindowHints();
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwWindowHint(JNIEnv* env, jclass clazz, jint target, jint hint) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwWindowHint(JNIEnv* env, jclass clazz, jint target, jint hint) {
 		glfwWindowHint(target, hint);
 	}
 
-	static inline jlong wrapped_Java_firststep_glfw_GLFW_glfwCreateWindowJni(JNIEnv* env, jclass clazz, jint width, jint height, jstring obj_title, jlong monitor, jlong share, char* title) {
+	static inline jlong wrapped_Java_firststep_internal_GLFW_glfwCreateWindowJni(JNIEnv* env, jclass clazz, jint width, jint height, jstring obj_title, jlong monitor, jlong share, char* title) {
 
 		GLFWwindow* window = glfwCreateWindow(width, height, title, (GLFWmonitor*)monitor, (GLFWwindow*)share);
 		if (window) {
@@ -418,29 +418,29 @@ extern "C"
 
 	}
 
-	JNIEXPORT jlong JNICALL Java_firststep_glfw_GLFW_glfwCreateWindowJni(JNIEnv* env, jclass clazz, jint width, jint height, jstring obj_title, jlong monitor, jlong share) {
+	JNIEXPORT jlong JNICALL Java_firststep_internal_GLFW_glfwCreateWindowJni(JNIEnv* env, jclass clazz, jint width, jint height, jstring obj_title, jlong monitor, jlong share) {
 		char* title = (char*)env->GetStringUTFChars(obj_title, 0);
 
-		jlong JNI_returnValue = wrapped_Java_firststep_glfw_GLFW_glfwCreateWindowJni(env, clazz, width, height, obj_title, monitor, share, title);
+		jlong JNI_returnValue = wrapped_Java_firststep_internal_GLFW_glfwCreateWindowJni(env, clazz, width, height, obj_title, monitor, share, title);
 
 		env->ReleaseStringUTFChars(obj_title, title);
 
 		return JNI_returnValue;
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwDestroyWindow(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwDestroyWindow(JNIEnv* env, jclass clazz, jlong window) {
 		glfwDestroyWindow((GLFWwindow*)window);
 	}
 
-	JNIEXPORT jboolean JNICALL Java_firststep_glfw_GLFW_glfwWindowShouldClose(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT jboolean JNICALL Java_firststep_internal_GLFW_glfwWindowShouldClose(JNIEnv* env, jclass clazz, jlong window) {
 		return GL_TRUE == glfwWindowShouldClose((GLFWwindow*)window);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetWindowShouldClose(JNIEnv* env, jclass clazz, jlong window, jint value) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetWindowShouldClose(JNIEnv* env, jclass clazz, jlong window, jint value) {
 		glfwSetWindowShouldClose((GLFWwindow*)window, value);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetWindowTitle(JNIEnv* env, jclass clazz, jlong window, jstring obj_title) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetWindowTitle(JNIEnv* env, jclass clazz, jlong window, jstring obj_title) {
 		char* title = (char*)env->GetStringUTFChars(obj_title, 0);
 
 		glfwSetWindowTitle((GLFWwindow*)window, title);
@@ -448,11 +448,11 @@ extern "C"
 		env->ReleaseStringUTFChars(obj_title, title);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetWindowPos(JNIEnv* env, jclass clazz, jlong window, jint x, jint y) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetWindowPos(JNIEnv* env, jclass clazz, jlong window, jint x, jint y) {
 		glfwSetWindowPos((GLFWwindow*)window, x, y);
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetWindowX(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetWindowX(JNIEnv* env, jclass clazz, jlong window) {
 
 		int x = 0;
 		int y = 0;
@@ -461,7 +461,7 @@ extern "C"
 
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetWindowY(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetWindowY(JNIEnv* env, jclass clazz, jlong window) {
 
 		int x = 0;
 		int y = 0;
@@ -469,7 +469,7 @@ extern "C"
 		return y;
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetWindowWidth(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetWindowWidth(JNIEnv* env, jclass clazz, jlong window) {
 
 		int width = 0;
 		int height = 0;
@@ -478,7 +478,7 @@ extern "C"
 
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetWindowHeight(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetWindowHeight(JNIEnv* env, jclass clazz, jlong window) {
 
 		int width = 0;
 		int height = 0;
@@ -487,31 +487,31 @@ extern "C"
 
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetWindowSize(JNIEnv* env, jclass clazz, jlong window, jint width, jint height) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetWindowSize(JNIEnv* env, jclass clazz, jlong window, jint width, jint height) {
 		glfwSetWindowSize((GLFWwindow*)window, width, height);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwIconifyWindow(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwIconifyWindow(JNIEnv* env, jclass clazz, jlong window) {
 		glfwIconifyWindow((GLFWwindow*)window);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwRestoreWindow(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwRestoreWindow(JNIEnv* env, jclass clazz, jlong window) {
 		glfwRestoreWindow((GLFWwindow*)window);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwHideWindow(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwHideWindow(JNIEnv* env, jclass clazz, jlong window) {
 		glfwHideWindow((GLFWwindow*)window);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwShowWindow(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwShowWindow(JNIEnv* env, jclass clazz, jlong window) {
 		glfwShowWindow((GLFWwindow*)window);
 	}
 
-	JNIEXPORT jlong JNICALL Java_firststep_glfw_GLFW_glfwGetWindowMonitor(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT jlong JNICALL Java_firststep_internal_GLFW_glfwGetWindowMonitor(JNIEnv* env, jclass clazz, jlong window) {
 		return (jlong)glfwGetWindowMonitor((GLFWwindow*)window);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetCallbackJni(JNIEnv* env, jclass clazz, jobject javaCallback) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetCallbackJni(JNIEnv* env, jclass clazz, jobject javaCallback) {
 
 		if (callback) {
 			env->DeleteGlobalRef(callback);
@@ -521,31 +521,31 @@ extern "C"
 
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwPollEventsJni(JNIEnv* env, jclass clazz, jobject javaCallback) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwPollEventsJni(JNIEnv* env, jclass clazz, jobject javaCallback) {
 		glfwPollEvents();
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwWaitEventsJni(JNIEnv* env, jclass clazz, jobject javaCallback) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwWaitEventsJni(JNIEnv* env, jclass clazz, jobject javaCallback) {
 		glfwWaitEvents();
 	}
 
-	JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetInputMode(JNIEnv* env, jclass clazz, jlong window, jint mode) {
+	JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetInputMode(JNIEnv* env, jclass clazz, jlong window, jint mode) {
 		return glfwGetInputMode((GLFWwindow*)window, mode);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetInputMode(JNIEnv* env, jclass clazz, jlong window, jint mode, jint value) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetInputMode(JNIEnv* env, jclass clazz, jlong window, jint mode, jint value) {
 		glfwSetInputMode((GLFWwindow*)window, mode, value);
 	}
 
-	JNIEXPORT jboolean JNICALL Java_firststep_glfw_GLFW_glfwGetKey(JNIEnv* env, jclass clazz, jlong window, jint key) {
+	JNIEXPORT jboolean JNICALL Java_firststep_internal_GLFW_glfwGetKey(JNIEnv* env, jclass clazz, jlong window, jint key) {
 		return glfwGetKey((GLFWwindow*)window, key) == GLFW_PRESS;
 	}
 
-	JNIEXPORT jboolean JNICALL Java_firststep_glfw_GLFW_glfwGetMouseButton(JNIEnv* env, jclass clazz, jlong window, jint button) {
+	JNIEXPORT jboolean JNICALL Java_firststep_internal_GLFW_glfwGetMouseButton(JNIEnv* env, jclass clazz, jlong window, jint button) {
 		return glfwGetMouseButton((GLFWwindow*)window, button) == GLFW_PRESS;
 	}
 
-	JNIEXPORT jdouble JNICALL Java_firststep_glfw_GLFW_glfwGetCursorPosX(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT jdouble JNICALL Java_firststep_internal_GLFW_glfwGetCursorPosX(JNIEnv* env, jclass clazz, jlong window) {
 
 		double x = 0;
 		double y = 0;
@@ -554,7 +554,7 @@ extern "C"
 
 	}
 
-	JNIEXPORT jdouble JNICALL Java_firststep_glfw_GLFW_glfwGetCursorPosY(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT jdouble JNICALL Java_firststep_internal_GLFW_glfwGetCursorPosY(JNIEnv* env, jclass clazz, jlong window) {
 
 		double x = 0;
 		double y = 0;
@@ -563,83 +563,83 @@ extern "C"
 
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetCursorPos(JNIEnv* env, jclass clazz, jlong window, jint x, jint y) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetCursorPos(JNIEnv* env, jclass clazz, jlong window, jint x, jint y) {
 		glfwSetCursorPos((GLFWwindow*)window, x, y);
 	}
 
-/*static inline jint wrapped_Java_firststep_glfw_GLFW_glfwGetJoystickAxes(JNIEnv* env, jclass clazz, jint joy, jfloatArray obj_axes, float* axes) {
+/*static inline jint wrapped_Java_firststep_internal_GLFW_glfwGetJoystickAxes(JNIEnv* env, jclass clazz, jint joy, jfloatArray obj_axes, float* axes) {
 		return glfwGetJoystickAxes(joy, axes, env->GetArrayLength(obj_axes));
 }
 
-JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetJoystickAxes(JNIEnv* env, jclass clazz, jint joy, jfloatArray obj_axes) {
+JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetJoystickAxes(JNIEnv* env, jclass clazz, jint joy, jfloatArray obj_axes) {
 	float* axes = (float*)env->GetPrimitiveArrayCritical(obj_axes, 0);
 
-	jint JNI_returnValue = wrapped_Java_firststep_glfw_GLFW_glfwGetJoystickAxes(env, clazz, joy, obj_axes, axes);
+	jint JNI_returnValue = wrapped_Java_firststep_internal_GLFW_glfwGetJoystickAxes(env, clazz, joy, obj_axes, axes);
 
 	env->ReleasePrimitiveArrayCritical(obj_axes, axes, 0);
 
 	return JNI_returnValue;
 }
 
-static inline jint wrapped_Java_firststep_glfw_GLFW_glfwGetJoystickButtons(JNIEnv* env, jclass clazz, jint joy, jbyteArray obj_buttons, char* buttons) {
+static inline jint wrapped_Java_firststep_internal_GLFW_glfwGetJoystickButtons(JNIEnv* env, jclass clazz, jint joy, jbyteArray obj_buttons, char* buttons) {
 		return glfwGetJoystickButtons(joy, (unsigned char*)buttons, env->GetArrayLength(obj_buttons));
 }
 
-JNIEXPORT jint JNICALL Java_firststep_glfw_GLFW_glfwGetJoystickButtons(JNIEnv* env, jclass clazz, jint joy, jbyteArray obj_buttons) {
+JNIEXPORT jint JNICALL Java_firststep_internal_GLFW_glfwGetJoystickButtons(JNIEnv* env, jclass clazz, jint joy, jbyteArray obj_buttons) {
 	char* buttons = (char*)env->GetPrimitiveArrayCritical(obj_buttons, 0);
 
-	jint JNI_returnValue = wrapped_Java_firststep_glfw_GLFW_glfwGetJoystickButtons(env, clazz, joy, obj_buttons, buttons);
+	jint JNI_returnValue = wrapped_Java_firststep_internal_GLFW_glfwGetJoystickButtons(env, clazz, joy, obj_buttons, buttons);
 
 	env->ReleasePrimitiveArrayCritical(obj_buttons, buttons, 0);
 
 	return JNI_returnValue;
 }*/
 
-	JNIEXPORT jstring JNICALL Java_firststep_glfw_GLFW_glfwGetJoystickName(JNIEnv* env, jclass clazz, jint joy) {
+	JNIEXPORT jstring JNICALL Java_firststep_internal_GLFW_glfwGetJoystickName(JNIEnv* env, jclass clazz, jint joy) {
 		return env->NewStringUTF(glfwGetJoystickName(joy));
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetClipboardString(JNIEnv* env, jclass clazz, jlong window, jstring obj_string) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetClipboardString(JNIEnv* env, jclass clazz, jlong window, jstring obj_string) {
 		char* string = (char*)env->GetStringUTFChars(obj_string, 0);
 		glfwSetClipboardString((GLFWwindow*)window, string);
 		env->ReleaseStringUTFChars(obj_string, string);
 	}
 
-	JNIEXPORT jstring JNICALL Java_firststep_glfw_GLFW_glfwGetClipboardString(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT jstring JNICALL Java_firststep_internal_GLFW_glfwGetClipboardString(JNIEnv* env, jclass clazz, jlong window) {
 		return env->NewStringUTF(glfwGetClipboardString((GLFWwindow*)window));
 	}
 
-	JNIEXPORT jdouble JNICALL Java_firststep_glfw_GLFW_glfwGetTime(JNIEnv* env, jclass clazz) {
+	JNIEXPORT jdouble JNICALL Java_firststep_internal_GLFW_glfwGetTime(JNIEnv* env, jclass clazz) {
 		return glfwGetTime();
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSetTime(JNIEnv* env, jclass clazz, jdouble time) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSetTime(JNIEnv* env, jclass clazz, jdouble time) {
 		glfwSetTime(time);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwMakeContextCurrentJni(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwMakeContextCurrentJni(JNIEnv* env, jclass clazz, jlong window) {
 		glfwMakeContextCurrent((GLFWwindow*)window);
 	}
 
-	JNIEXPORT jlong JNICALL Java_firststep_glfw_GLFW_glfwGetCurrentContext(JNIEnv* env, jclass clazz) {
+	JNIEXPORT jlong JNICALL Java_firststep_internal_GLFW_glfwGetCurrentContext(JNIEnv* env, jclass clazz) {
 		return (jlong)glfwGetCurrentContext();
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSwapBuffers(JNIEnv* env, jclass clazz, jlong window) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSwapBuffers(JNIEnv* env, jclass clazz, jlong window) {
 		glfwSwapBuffers((GLFWwindow*)window);
 	}
 
-	JNIEXPORT void JNICALL Java_firststep_glfw_GLFW_glfwSwapInterval(JNIEnv* env, jclass clazz, jint interval) {
+	JNIEXPORT void JNICALL Java_firststep_internal_GLFW_glfwSwapInterval(JNIEnv* env, jclass clazz, jint interval) {
 		glfwSwapInterval(interval);
 	}
 
-	static inline jboolean wrapped_Java_firststep_glfw_GLFW_glfwExtensionSupported(JNIEnv* env, jclass clazz, jstring obj_extension, char* extension) {
+	static inline jboolean wrapped_Java_firststep_internal_GLFW_glfwExtensionSupported(JNIEnv* env, jclass clazz, jstring obj_extension, char* extension) {
 		return glfwExtensionSupported(extension) == GL_TRUE;
 	}
 
-	JNIEXPORT jboolean JNICALL Java_firststep_glfw_GLFW_glfwExtensionSupported(JNIEnv* env, jclass clazz, jstring obj_extension) {
+	JNIEXPORT jboolean JNICALL Java_firststep_internal_GLFW_glfwExtensionSupported(JNIEnv* env, jclass clazz, jstring obj_extension) {
 		char* extension = (char*)env->GetStringUTFChars(obj_extension, 0);
-		jboolean JNI_returnValue = wrapped_Java_firststep_glfw_GLFW_glfwExtensionSupported(env, clazz, obj_extension, extension);
+		jboolean JNI_returnValue = wrapped_Java_firststep_internal_GLFW_glfwExtensionSupported(env, clazz, obj_extension, extension);
 		env->ReleaseStringUTFChars(obj_extension, extension);
 		return JNI_returnValue;
 	}

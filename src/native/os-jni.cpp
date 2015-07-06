@@ -2,9 +2,9 @@
 
 extern "C"
 {
-	#define PLATFORM_ENUM "firststep/os/GlobalConsts$Platform"
+	#define PLATFORM_ENUM "firststep/internal/OS$Platform"
 	
-	JNIEXPORT jobject JNICALL Java_firststep_os_GlobalConsts_getPlatform(JNIEnv * env, jclass clz)
+	JNIEXPORT jobject JNICALL Java_firststep_internal_OS_getPlatform(JNIEnv * env, jclass clz)
 	{
 		jclass platformEnum = env->FindClass(PLATFORM_ENUM);
 #if defined(__MINGW32__) || defined(__MINGW64__)

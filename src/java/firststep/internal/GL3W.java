@@ -1,4 +1,4 @@
-package firststep.gl3w;
+package firststep.internal;
 
 public class GL3W {
 	static {

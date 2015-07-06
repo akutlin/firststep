@@ -1,12 +1,11 @@
 package coollife;
 
-import firststep.os.GlobalConsts;
-import firststep.gl3w.GL3W;
-import firststep.glfw.GLFW;
-import firststep.glfw.Callback;
-import firststep.glfw.CallbackAdapter;
-import firststep.nvg.Color;
-import firststep.nvg.NVG;
+import firststep.internal.GL3W;
+import firststep.internal.GLFW;
+import firststep.internal.NVG;
+import firststep.internal.OS;
+import firststep.internal.GLFW.Callback;
+import firststep.internal.GLFW.CallbackAdapter;
 
 public class LifeMain {
 	
@@ -129,7 +128,7 @@ public class LifeMain {
 	    
 	    // Painting dark cells
         NVG.beginPath(vg);
-        NVG.fillColor(vg, new Color(0, 0, 0));
+        NVG.fillColor(vg, new NVG.Color(0, 0, 0));
 	    for (int i = 0; i < field.getWidth(); i++)
 	    for (int j = 0; j < field.getHeight(); j++)
 	    {
@@ -142,7 +141,7 @@ public class LifeMain {
 
 	    // Painting light cells
         NVG.beginPath(vg);
-        NVG.fillColor(vg, new Color(192, 192, 192));
+        NVG.fillColor(vg, new NVG.Color(192, 192, 192));
 	    for (int i = 0; i < field.getWidth(); i++)
 	    for (int j = 0; j < field.getHeight(); j++)
 	    {
@@ -156,7 +155,7 @@ public class LifeMain {
 	    
 	    // Painting lines between cells
         NVG.beginPath(vg);
-        NVG.strokeColor(vg, new Color(64, 64, 64, 255));
+        NVG.strokeColor(vg, new NVG.Color(64, 64, 64, 255));
         if (k > 8)
         {
 		    for (int i = 0; i < field.getWidth(); i++)
@@ -169,7 +168,7 @@ public class LifeMain {
 	    
 	    if (mouseI >= 0 && mouseI < field.getWidth() && mouseJ >= 0 && mouseJ < field.getHeight())
 	    {
-	        NVG.fillColor(vg, new Color(255, 255, 255, 64));
+	        NVG.fillColor(vg, new NVG.Color(255, 255, 255, 64));
 	        NVG.beginPath(vg);
 	        NVG.rect(vg, x0 + mouseI * k, y0 + mouseJ * k, k, k);
 	        NVG.fill(vg);
@@ -223,7 +222,7 @@ public class LifeMain {
 		
 		GLFW.glfwSetCallback(cb);
 		
-		if (GlobalConsts.getPlatform() == GlobalConsts.Platform.OSX) {
+		if (OS.getPlatform() == OS.Platform.OSX) {
 			// We initialize OpenGL 3.2 Core profile on OSX cause
 			// it is the only GL3 that Apple knows.
 			
@@ -253,7 +252,7 @@ public class LifeMain {
 		System.out.println("GL version: " + GL3W.getGLVersionMajor() + "." + GL3W.getGLVersionMinor());
 		System.out.println("GLSL version: " + GL3W.getGLSLVersionMajor() + "." + GL3W.getGLSLVersionMinor());
 
-		vg = NVG.create(firststep.nvg.NVG.NVG_ANTIALIAS | firststep.nvg.NVG.NVG_STENCIL_STROKES | firststep.nvg.NVG.NVG_DEBUG);
+		vg = NVG.create(firststep.internal.NVG.NVG_ANTIALIAS | firststep.internal.NVG.NVG_STENCIL_STROKES | firststep.internal.NVG.NVG_DEBUG);
 		
 		field = new Cells(100, 70);
 	}

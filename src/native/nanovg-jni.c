@@ -72,7 +72,7 @@ jobject createPaintJobject(JNIEnv *e, NVGpaint p) {
 }
 */
 
-JNIEXPORT jlong JNICALL Java_firststep_nvg_NVG_test
+JNIEXPORT jlong JNICALL Java_firststep_internal_NVG_test
   (JNIEnv *e, jclass c, jint i)
 {
 	printf("i=%i\n",i);
@@ -88,154 +88,154 @@ JNIEXPORT jlong JNICALL Java_firststep_nvg_NVG_test
 }
 
 
-JNIEXPORT jlong JNICALL Java_firststep_nvg_NVG_create
+JNIEXPORT jlong JNICALL Java_firststep_internal_NVG_create
   (JNIEnv *e, jclass c, jint flags)
 {
 	return (jlong)(NVGcontext*) nvgCreateGL3(flags);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_beginFrame
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_beginFrame
   (JNIEnv *e, jclass c, jlong ctx, jint wid, jint hgt, jfloat r)
 {
 	nvgBeginFrame((NVGcontext*)ctx, wid, hgt, r);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_cancelFrame
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_cancelFrame
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgCancelFrame((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_endFrame
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_endFrame
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgEndFrame((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_beginPath
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_beginPath
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgBeginPath((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_stroke
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_stroke
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgStroke((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_moveTo
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_moveTo
   (JNIEnv *e, jclass c, jlong ctx, jfloat x, jfloat y)
 {
 	nvgMoveTo((NVGcontext*)ctx,x,y);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_lineTo
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_lineTo
   (JNIEnv *e, jclass c, jlong ctx, jfloat x, jfloat y)
 {
 	nvgLineTo((NVGcontext*)ctx,x,y);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_fillColor
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_fillColor
   (JNIEnv *e, jclass c, jlong ctx, jobject jo)
 {
 	checkJO(jo,"\nNull colour was passed to fillColor\n");
 	nvgFillColor((NVGcontext*)ctx, (NVGcolor)*((NVGcolor*)getBuffPtr(e,jo)));
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_fillColorf
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_fillColorf
   (JNIEnv *e, jclass c, jlong ctx, jfloat r, jfloat g, jfloat b, jfloat a)
 {
 	nvgFillColor((NVGcontext*)ctx, nvgRGBAf(r,g,b,a) );
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_strokeColor
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_strokeColor
   (JNIEnv *e, jclass c, jlong ctx, jobject jo)
 {
 	checkJO(jo,"\nNull colour was passed to strokeColor\n");
 	nvgStrokeColor((NVGcontext*)ctx, (NVGcolor)*((NVGcolor*)getBuffPtr(e,jo)));
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_strokeColorf
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_strokeColorf
   (JNIEnv *e, jclass c, jlong ctx, jfloat r, jfloat g, jfloat b, jfloat a)
 {
 	nvgStrokeColor((NVGcontext*)ctx, nvgRGBAf(r,g,b,a));
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_strokeWidth
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_strokeWidth
   (JNIEnv *e, jclass c, jlong ctx, jfloat w)
 {
 	nvgStrokeWidth((NVGcontext*)ctx, w);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_rect
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_rect
   (JNIEnv *e, jclass c, jlong ctx, jfloat x, jfloat y, jfloat w, jfloat h)
 {
 	nvgRect((NVGcontext*)ctx, x,y, w,h);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_fill
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_fill
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgFill((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_save
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_save
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgSave((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_restore
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_restore
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgRestore((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_reset
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_reset
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgReset((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_miterLimit
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_miterLimit
   (JNIEnv *e, jclass c, jlong ctx, jfloat l)
 {
 	nvgMiterLimit((NVGcontext*)ctx, l);
 }
 
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_quadTo
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_quadTo
   (JNIEnv *e, jclass c, jlong ctx, jfloat cx, jfloat cy, jfloat x, jfloat y)
 {
 	nvgQuadTo((NVGcontext*)ctx, cx,cy, x,y);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_bezierTo
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_bezierTo
   (JNIEnv *e, jclass c, jlong ctx, jfloat c1x, jfloat c1y, jfloat c2x, jfloat c2y, jfloat x, jfloat y)
 {
 	nvgBezierTo((NVGcontext*)ctx, c1x,c1y, c2x,c2y, x,y);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_lineCap
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_lineCap
   (JNIEnv *e, jclass c, jlong ctx, jint cap)
 {
 	nvgLineCap((NVGcontext*)ctx, cap);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_lineJoin
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_lineJoin
   (JNIEnv *e, jclass c, jlong ctx, jint join)
 {
 	nvgLineJoin((NVGcontext*)ctx, join);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_circle
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_circle
   (JNIEnv *e, jclass c, jlong ctx, jfloat cx, jfloat cy, jfloat r)
 {
 	nvgCircle((NVGcontext*)ctx, cx, cy, r);
 }
 
-JNIEXPORT int JNICALL Java_firststep_nvg_NVG_createImage
+JNIEXPORT int JNICALL Java_firststep_internal_NVG_createImage
   (JNIEnv *e, jclass c, jlong ctx, jstring fname, jint flags)
 {
 	int r;
@@ -247,20 +247,20 @@ JNIEXPORT int JNICALL Java_firststep_nvg_NVG_createImage
 	return r;
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_deleteImage
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_deleteImage
   (JNIEnv *e, jclass c, jlong ctx, jint im)
 {
 	nvgDeleteImage((NVGcontext*)ctx, im);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_roundedRect
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_roundedRect
   (JNIEnv *e, jclass c, jlong ctx, jfloat x, jfloat y, jfloat w, jfloat h, jfloat r)
 {
 	nvgRoundedRect((NVGcontext*)ctx, x,y, w,h, r);
 }
 
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1imagePattern
+JNIEXPORT void JNICALL Java_firststep_internal_NVG__1_1imagePattern
   (JNIEnv *e, jclass c, jlong ctx, jobject paint, jfloat ox, jfloat oy,
 		jfloat ex, jfloat ey, jfloat angle, jint image, jfloat alpha)
 {
@@ -270,7 +270,7 @@ JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1imagePattern
 	*dp = p;
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1linearGradient
+JNIEXPORT void JNICALL Java_firststep_internal_NVG__1_1linearGradient
   (JNIEnv *e, jclass cls, jlong ctx, jobject paint, jfloat sx, jfloat sy, jfloat ex, jfloat ey, jobject scol, jobject ecol)
 {
 	checkJO(scol,"\nLinearGradient was passed NULL start colour\n");
@@ -282,7 +282,7 @@ JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1linearGradient
 	*dp = p;
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1boxGradient
+JNIEXPORT void JNICALL Java_firststep_internal_NVG__1_1boxGradient
   (JNIEnv *e, jclass cls, jlong ctx, jobject paint, jfloat x, jfloat y,
 				jfloat w, jfloat h, jfloat r, jfloat f, jobject scol, jobject ecol)
 {
@@ -295,7 +295,7 @@ JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1boxGradient
 	*dp = p;
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1radialGradient
+JNIEXPORT void JNICALL Java_firststep_internal_NVG__1_1radialGradient
   (JNIEnv *e, jclass c, jlong ctx, jobject paint, jfloat cx, jfloat cy, jfloat inr, jfloat outr, jobject scol, jobject ecol)
 {
 	checkJO(scol,"\nRadialGradient was passed NULL start colour\n");
@@ -307,38 +307,38 @@ JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1radialGradient
 	*dp = p;
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_fillPaint
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_fillPaint
   (JNIEnv *e, jclass c, jlong ctx, jobject paint)
 {
 	checkJO(paint,"\nFillPaint was passed NULL paint\n");
 	nvgFillPaint((NVGcontext*)ctx, (NVGpaint)*((NVGpaint*)getBuffPtr(e,paint)));
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_scissor
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_scissor
   (JNIEnv *e, jclass c, jlong ctx, jfloat x, jfloat y, jfloat w, jfloat h)
 {
 	nvgScissor((NVGcontext*)ctx, x,y, w,h);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_intersectScissor
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_intersectScissor
   (JNIEnv *e, jclass c, jlong ctx, jfloat x, jfloat y, jfloat w, jfloat h)
 {
 	nvgIntersectScissor((NVGcontext*)ctx, x, y, w, h);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_resetScissor
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_resetScissor
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgResetScissor((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_fontSize
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_fontSize
   (JNIEnv *e, jclass c, jlong ctx, jfloat sz)
 {
 	nvgFontSize((NVGcontext*)ctx, sz);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_fontFace
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_fontFace
   (JNIEnv *e, jclass c, jlong ctx, jstring jfont)
 {
 	checkJO(jfont, "\nfontFace was passed a NULL string\n");
@@ -349,19 +349,19 @@ JNIEXPORT void JNICALL Java_firststep_nvg_NVG_fontFace
     (*e)->ReleaseStringUTFChars(e, jfont, font);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_textAlign
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_textAlign
   (JNIEnv *e, jclass c, jlong ctx, jint align)
 {
 	nvgTextAlign((NVGcontext*)ctx, align);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_fontBlur
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_fontBlur
   (JNIEnv *e, jclass c, jlong ctx, jfloat blr)
 {
 	nvgFontBlur((NVGcontext*)ctx, blr);
 }
 
-JNIEXPORT jfloat JNICALL Java_firststep_nvg_NVG_text
+JNIEXPORT jfloat JNICALL Java_firststep_internal_NVG_text
   (JNIEnv *e, jclass c, jlong ctx, jfloat x, jfloat y, jstring jmesg)
 {
 	checkJO(jmesg,"\nvg.Text was passed a NULL string\n");
@@ -373,7 +373,7 @@ JNIEXPORT jfloat JNICALL Java_firststep_nvg_NVG_text
     return r;
 }
 
-JNIEXPORT jint JNICALL Java_firststep_nvg_NVG_createFont
+JNIEXPORT jint JNICALL Java_firststep_internal_NVG_createFont
   (JNIEnv *e, jclass c, jlong ctx, jstring jname, jstring jpath)
 {
 	checkJO(jname,"\ncreateFont was passed a NULL name string\n");
@@ -390,98 +390,98 @@ JNIEXPORT jint JNICALL Java_firststep_nvg_NVG_createFont
 	return r;
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_rotate
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_rotate
   (JNIEnv *e, jclass c, jlong ctx, jfloat angle)
 {
 	nvgRotate((NVGcontext*)ctx, angle);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_resetTransform
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_resetTransform
   (JNIEnv *e, jclass c, jlong ctx)
 {
 	nvgResetTransform((NVGcontext*)ctx);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_translate
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_translate
   (JNIEnv *e, jclass c, jlong ctx, jfloat x, jfloat y)
 {
 	nvgTranslate((NVGcontext*)ctx, x, y);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_scale
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_scale
   (JNIEnv *e, jclass c, jlong ctx, jfloat x, jfloat y)
 {
 	nvgScale((NVGcontext*)ctx, x, y);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_strokePaint
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_strokePaint
   (JNIEnv *e, jclass c, jlong ctx, jobject paint)
 {
 	checkJO(paint,"\nstrokePaint was passed a NULL paint\n");
 	nvgStrokePaint((NVGcontext*)ctx, (NVGpaint)*((NVGpaint*)getBuffPtr(e,paint)));
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_globalAlpha
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_globalAlpha
   (JNIEnv *e, jclass c, jlong ctx, jfloat alpha)
 {
 	nvgGlobalAlpha((NVGcontext*)ctx, alpha);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_transform
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_transform
   (JNIEnv *env, jclass cls, jlong ctx, jfloat a, jfloat b, jfloat c, jfloat d, jfloat e, jfloat f)
 {
 	nvgTransform((NVGcontext*)ctx, a, b, c, d, e, f);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_skewX
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_skewX
   (JNIEnv *e, jclass c, jlong ctx, jfloat angle)
 {
 	nvgSkewX((NVGcontext*)ctx, angle);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_skewY
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_skewY
   (JNIEnv *e, jclass c, jlong ctx, jfloat angle)
 {
 	nvgSkewY((NVGcontext*)ctx, angle);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_arcTo
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_arcTo
   (JNIEnv *e, jclass c, jlong ctx, jfloat x1, jfloat y1, jfloat x2, jfloat y2, jfloat radius)
 {
 	nvgArcTo((NVGcontext*)ctx, x1, y1, x2, y2, radius);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_pathWinding
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_pathWinding
   (JNIEnv *e, jclass c, jlong ctx, jint dir)
 {
 	nvgPathWinding((NVGcontext*)ctx, dir);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_arc
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_arc
   (JNIEnv *e, jclass c, jlong ctx, jfloat cx, jfloat cy, jfloat r, jfloat a0, jfloat a1, jint dir)
 {
 	nvgArc((NVGcontext*)ctx, cx, cy, r, a0, a1, dir);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_ellipse
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_ellipse
   (JNIEnv *e, jclass c, jlong ctx, jfloat cx, jfloat cy, jfloat rx, jfloat ry)
 {
 	nvgEllipse((NVGcontext*)ctx, cx, cy, rx, ry);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_textLetterSpacing
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_textLetterSpacing
   (JNIEnv *e, jclass c, jlong ctx, jfloat spacing)
 {
 	nvgTextLetterSpacing((NVGcontext*)ctx, spacing);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_textLineHeight
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_textLineHeight
   (JNIEnv *e, jclass c, jlong ctx, jfloat lineHeight)
 {
 	nvgTextLineHeight((NVGcontext*)ctx, lineHeight);
 }
 
-JNIEXPORT jint JNICALL Java_firststep_nvg_NVG_findFont
+JNIEXPORT jint JNICALL Java_firststep_internal_NVG_findFont
   (JNIEnv *e, jclass c, jlong ctx, jstring jname)
 {
 	checkJO(jname,"\nfindFont was passed a NULL name string\n");
@@ -494,20 +494,20 @@ JNIEXPORT jint JNICALL Java_firststep_nvg_NVG_findFont
     return r;
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG_fontFaceId
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_fontFaceId
   (JNIEnv *e, jclass c, jlong ctx, jint fid)
 {
 	nvgFontFaceId((NVGcontext*)ctx, fid);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1getTransform
+JNIEXPORT void JNICALL Java_firststep_internal_NVG__1_1getTransform
   (JNIEnv *e, jclass c, jlong ctx, jobject jdest)
 {
 	float* dest = (float*)getBuffPtr(e,jdest);
 	nvgCurrentTransform((NVGcontext*)ctx, dest);
 }
 
-JNIEXPORT void JNICALL Java_firststep_nvg_NVG__1_1setTransform
+JNIEXPORT void JNICALL Java_firststep_internal_NVG__1_1setTransform
   (JNIEnv *e, jclass c, jlong ctx, jobject jsrc)
 {
 	float* src = (float*)getBuffPtr(e,jsrc);
