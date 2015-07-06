@@ -42,16 +42,16 @@ public class LifeMain {
 		
 		@Override
 		public void key(long window, int key, int scancode, int action, int mods) {
-			if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
-				GLFW.glfwSetWindowShouldClose(window, 1);
-			} else if (key == GLFW.GLFW_KEY_SPACE && action == GLFW.GLFW_PRESS) {
+			if (key == GLFW.KEY_ESCAPE && action == GLFW.PRESS) {
+				GLFW.setWindowShouldClose(window, 1);
+			} else if (key == GLFW.KEY_SPACE && action == GLFW.PRESS) {
 				isPaused = !isPaused;
 		        updateTitle();
 		    }
 		}
 		
 		public void mouseButton(long window, int button, int action, int mods) {
-		    if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_PRESS)
+		    if (button == GLFW.MOUSE_BUTTON_LEFT && action == GLFW.PRESS)
 		    {
 		    	isDown = true;
 		        if (!field.getCell(mouseI, mouseJ))
@@ -66,7 +66,7 @@ public class LifeMain {
 		        }
 		    }
 		    
-		    if (button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+		    if (button == GLFW.MOUSE_BUTTON_LEFT && action == GLFW.RELEASE) {
 		    	isDown = false;
 		    }
 		}
@@ -97,8 +97,8 @@ public class LifeMain {
 	private void cellUnderMouse(int winWidth, int winHeight)
 	{
 	    double mx, my;
-	    mx = GLFW.glfwGetCursorPosX(window);
-	    my = GLFW.glfwGetCursorPosY(window);
+	    mx = GLFW.getCursorPosX(window);
+	    my = GLFW.getCursorPosY(window);
 
 	    float k = calcScale(winWidth, winHeight);
 	    float x0 = winWidth / 2 - (field.getWidth() * k / 2);
@@ -112,11 +112,11 @@ public class LifeMain {
 	{
 	    if (isPaused)
 	    {
-	        GLFW.glfwSetWindowTitle(window, APPNAME + " [ Pause ]");
+	        GLFW.setWindowTitle(window, APPNAME + " [ Pause ]");
 	    }
 	    else
 	    {
-	    	GLFW.glfwSetWindowTitle(window, APPNAME);
+	    	GLFW.setWindowTitle(window, APPNAME);
 	    }
 	}
 	
@@ -177,8 +177,8 @@ public class LifeMain {
 	}
 
 	private void drawContents(long vg) {
-		int winWidth = GLFW.glfwGetWindowWidth(window);
-		int winHeight = GLFW.glfwGetWindowHeight(window);
+		int winWidth = GLFW.getWindowWidth(window);
+		int winHeight = GLFW.getWindowHeight(window);
 		cellUnderMouse(winWidth, winHeight);
 
 		int fbWidth = winWidth;	// TODO FramebufferSize
@@ -197,13 +197,13 @@ public class LifeMain {
 		
         NVG.endFrame(vg);
 
-        GLFW.glfwSwapBuffers(window);
+        GLFW.swapBuffers(window);
 	}
 	
 	private void frame() {
-		double t1 = GLFW.glfwGetTime();
+		double t1 = GLFW.getTime();
 		drawContents(vg);
-		double t2 = GLFW.glfwGetTime();
+		double t2 = GLFW.getTime();
 
 		try {
 			Thread.sleep((long) Math.max((1.0 / fps - (t2 - t1)) * 1000, 0));
@@ -214,39 +214,39 @@ public class LifeMain {
 	}
 	
 	public LifeMain() {
-		boolean initSuccess = GLFW.glfwInit();
+		boolean initSuccess = GLFW.init();
 		if (!initSuccess) {
 			throw new RuntimeException("GLFW initialization failed");
 		}
 		System.out.println("GLFW initialized");
 		
-		GLFW.glfwSetCallback(cb);
+		GLFW.setCallback(cb);
 		
 		if (OS.getPlatform() == OS.Platform.OSX) {
 			// We initialize OpenGL 3.2 Core profile on OSX cause
 			// it is the only GL3 that Apple knows.
 			
-			GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
-			GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
+			GLFW.windowHint(GLFW.CONTEXT_VERSION_MAJOR, 3);
+			GLFW.windowHint(GLFW.CONTEXT_VERSION_MINOR, 2);
 			
-			GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
-			GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, 1);
+			GLFW.windowHint(GLFW.OPENGL_PROFILE, GLFW.OPENGL_CORE_PROFILE);
+			GLFW.windowHint(GLFW.OPENGL_FORWARD_COMPAT, 1);
 		} else {
 			// On other platforms OpenGL 3.0 is sufficient for us.
 			
-			GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
-			GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 0);			
+			GLFW.windowHint(GLFW.CONTEXT_VERSION_MAJOR, 3);
+			GLFW.windowHint(GLFW.CONTEXT_VERSION_MINOR, 0);			
 		}
 
-		window = GLFW.glfwCreateWindow(600, 400, "Cool life", 0, 0);
+		window = GLFW.createWindow(600, 400, "Cool life", 0, 0);
 		if (window == 0) {
-			GLFW.glfwTerminate();
+			GLFW.terminate();
 			throw new RuntimeException("GLFW can't create a window");
 		}
 		
-		GLFW.glfwMakeContextCurrent(window);
+		GLFW.makeContextCurrent(window);
 		if (!GL3W.init()) {
-			GLFW.glfwTerminate();
+			GLFW.terminate();
 			throw new RuntimeException("GL3W initialization failed");
 		}
 		System.out.println("GL version: " + GL3W.getGLVersionMajor() + "." + GL3W.getGLVersionMinor());
@@ -259,13 +259,13 @@ public class LifeMain {
 	
 	public void loop() {
 		int frameIndex = 0;
-		while (!GLFW.glfwWindowShouldClose(window))
+		while (!GLFW.windowShouldClose(window))
 		{
 			frame();
 			if (!isPaused && frameIndex % 2 == 0) {
 				field = LifeEngine.turn(field);
 			}
-			GLFW.glfwPollEvents();
+			GLFW.pollEvents();
 			frameIndex ++;
 		}
 	}
