@@ -4,7 +4,6 @@ import firststep.Canvas;
 import firststep.Color;
 import firststep.DoubleXY;
 import firststep.Window;
-import firststep.internal.GLFW;
 
 
 public class LifeMainWindow extends Window {
@@ -20,17 +19,18 @@ public class LifeMainWindow extends Window {
 	private Cells field;
 	
 	@Override
-	public void key(int key, int scancode, int action, int mods) {
-		if (key == GLFW.KEY_ESCAPE && action == GLFW.PRESS) {
+	public void key(Key key, int scancode, KeyState state, Modifiers modifiers) {
+		if (key == Key.ESCAPE && state == KeyState.PRESS) {
 			close();
-		} else if (key == GLFW.KEY_SPACE && action == GLFW.PRESS) {
+		} else if (key == Key.SPACE && state == KeyState.PRESS) {
 			isPaused = !isPaused;
 	        updateTitle();
 	    }
 	}
 	
-	public void mouseButton(int button, int action, int mods) {
-	    if (button == GLFW.MOUSE_BUTTON_LEFT && action == GLFW.PRESS)
+	@Override
+	public void mouseButton(MouseButton button, MouseButtonState state, Modifiers modifiers) {
+	    if (button == MouseButton.LEFT && state == MouseButtonState.PRESS)
 	    {
 	    	isDown = true;
 	        if (!field.getCell(mouseI, mouseJ))
@@ -45,16 +45,19 @@ public class LifeMainWindow extends Window {
 	        }
 	    }
 	    
-	    if (button == GLFW.MOUSE_BUTTON_LEFT && action == GLFW.RELEASE) {
+	    if (button == MouseButton.LEFT && state == MouseButtonState.RELEASE) {
 	    	isDown = false;
 	    }
 	}
 	
+	@Override
 	public void cursorPos(double x, double y) {
 		if (isDown) {
         	field.setCell(mouseI, mouseJ, clickedColor);
 		}
-	}	
+	}
+	
+	
 	private float calcScale(int winWidth, int winHeight)
 	{
 	    float wpw = (float)field.getWidth() / winWidth;
