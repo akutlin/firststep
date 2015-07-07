@@ -1,11 +1,11 @@
 package coollife;
 
 import firststep.Canvas;
+import firststep.Color;
 import firststep.DoubleXY;
 import firststep.Window;
 import firststep.internal.GLFW;
-import firststep.internal.NVG;
-import firststep.internal.NVG.Color;
+
 
 public class LifeMainWindow extends Window {
 	
@@ -106,7 +106,7 @@ public class LifeMainWindow extends Window {
 	    
 	    // Painting dark cells
         cnv.beginPath();
-        cnv.fillColor(new NVG.Color(0, 0, 0));
+        cnv.fillColor(new Color(0, 0, 0));
 	    for (int i = 0; i < field.getWidth(); i++)
 	    for (int j = 0; j < field.getHeight(); j++)
 	    {
@@ -119,7 +119,7 @@ public class LifeMainWindow extends Window {
 
 	    // Painting light cells
         cnv.beginPath();
-        cnv.fillColor(new NVG.Color(192, 192, 192));
+        cnv.fillColor(new Color(192, 192, 192));
 	    for (int i = 0; i < field.getWidth(); i++)
 	    for (int j = 0; j < field.getHeight(); j++)
 	    {
@@ -133,7 +133,7 @@ public class LifeMainWindow extends Window {
 	    
 	    // Painting lines between cells
         cnv.beginPath();
-        cnv.strokeColor(new NVG.Color(64, 64, 64, 255));
+        cnv.strokeColor(new Color(64, 64, 64, 255));
         if (k > 8)
         {
 		    for (int i = 0; i < field.getWidth(); i++)
@@ -146,7 +146,7 @@ public class LifeMainWindow extends Window {
 	    
 	    if (mouseI >= 0 && mouseI < field.getWidth() && mouseJ >= 0 && mouseJ < field.getHeight())
 	    {
-	        cnv.fillColor(new NVG.Color(255, 255, 255, 64));
+	        cnv.fillColor(new Color(255, 255, 255, 64));
 	        cnv.beginPath();
 	        cnv.rect(x0 + mouseI * k, y0 + mouseJ * k, k, k);
 	        cnv.fill();

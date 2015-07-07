@@ -44,12 +44,12 @@ public class Canvas {
 		NVG.fill(nanoVGContext);
 	}
 	
-	public void strokeColor(NVG.Color color) {
-		NVG.strokeColor(nanoVGContext, color);
+	public void strokeColor(Color color) {
+		NVG.strokeColor(nanoVGContext, color.getNVGColor());
 	}
 
-	public void fillColor(NVG.Color color) {
-		NVG.fillColor(nanoVGContext, color);
+	public void fillColor(Color color) {
+		NVG.fillColor(nanoVGContext, color.getNVGColor());
 	}
 	
 	public void rect(float x, float y, float width, float height) {

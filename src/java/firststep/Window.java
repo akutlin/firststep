@@ -143,7 +143,7 @@ public class Window {
 
 	private long glfwWindow; 
 	private Canvas canvas;
-	private NVG.Color background = new NVG.Color(0f, 0f, 0f, 1f);
+	private Color background = new Color(0f, 0f, 0f, 1f);
 	private int width, height;
 	
 	long getGLFWWindow() {
@@ -241,11 +241,11 @@ public class Window {
 		GLFW.setWindowTitle(glfwWindow, title);
 	}
 	
-	public NVG.Color getBackground() {
+	public Color getBackground() {
 		return background;
 	}
 	
-	public void setBackground(NVG.Color background) {
+	public void setBackground(Color background) {
 		this.background = background;
 	}
 	
