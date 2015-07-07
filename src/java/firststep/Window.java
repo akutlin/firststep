@@ -13,24 +13,6 @@ import firststep.internal.GLFW.Callback;
 
 public class Window {
 
-	public class Position {
-		private double x, y;
-
-		public double getX() {
-			return x;
-		}
-		public double getY() {
-			return y;
-		}
-		
-		public Position(double x, double y) {
-			super();
-			this.x = x;
-			this.y = y;
-		}
-		
-	}
-	
 	private static Callback globalCallback = new Callback() {
 		
 		@Override
@@ -129,10 +111,6 @@ public class Window {
 		return Logger.getLogger(Window.class.getName(), null);
 	}
 	
-	/**
-	 * 
-	 * @return <code>false</code> if the window is closed
-	 */
 	public static void loop(float fpsMax) {
 		while (!openedWindows.isEmpty()) {
 			double t1 = GLFW.getTime();
@@ -164,9 +142,13 @@ public class Window {
 	}
 
 	private long glfwWindow; 
-	protected long nanoVGContext;
+	private Canvas canvas;
 	private NVG.Color background = new NVG.Color(0f, 0f, 0f, 1f);
 	private int width, height;
+	
+	long getGLFWWindow() {
+		return glfwWindow;
+	}
 	
 	public Window(String title, int width, int height) {
 		if (OS.getPlatform() == OS.Platform.OSX) {
@@ -193,7 +175,7 @@ public class Window {
 		getLogger().log(Level.INFO, "GLFW window \"" + title + "\" [" + width + "x" + height + "] is created");
 
 		if (!gl3wInitialized) {
-			GLFW.makeContextCurrent(glfwWindow);
+			makeContextCurrent();
 			if (!GL3W.init()) {
 				GLFW.terminate();
 				throw new RuntimeException("GL3W initialization failed");
@@ -205,12 +187,7 @@ public class Window {
 		getLogger().log(Level.INFO, "GL version: " + GL3W.getGLVersionMajor() + "." + GL3W.getGLVersionMinor());
 		getLogger().log(Level.INFO, "GLSL version: " + GL3W.getGLSLVersionMajor() + "." + GL3W.getGLSLVersionMinor());
 
-		nanoVGContext = NVG.create(firststep.internal.NVG.NVG_ANTIALIAS | firststep.internal.NVG.NVG_STENCIL_STROKES | firststep.internal.NVG.NVG_DEBUG);
-		if (nanoVGContext == 0) {
-			GLFW.terminate();
-			throw new RuntimeException("NanoVG can't create a context for the window");
-		}
-		getLogger().log(Level.INFO, "NanoVG context is created");
+		canvas = new Canvas(this);
 		
 		this.width = width;
 		this.height = height;
@@ -232,15 +209,19 @@ public class Window {
 		GL3W.glClearColor(background.getRed(), background.getGreen(), background.getBlue(), background.getAlpha());
 		GL3W.glClear(GL3W.GL_COLOR_BUFFER_BIT | GL3W.GL_STENCIL_BUFFER_BIT | GL3W.GL_DEPTH_BUFFER_BIT);
 		
-		NVG.beginFrame(nanoVGContext, width, height, pxRatio);
+		canvas.beginFrame(width, height, pxRatio);
 
-		frame();
+		frame(canvas);
 		
-        NVG.endFrame(nanoVGContext);
+        canvas.endFrame();
 
         GLFW.swapBuffers(glfwWindow);
 	}
 
+	void makeContextCurrent() {
+		GLFW.makeContextCurrent(glfwWindow);
+	}
+	
 	public void internalWindowSize(int width, int height) {
 		windowSize(width, height);
 		this.width = width;
@@ -252,8 +233,8 @@ public class Window {
 		GLFW.setWindowShouldClose(glfwWindow, 1);
 	}
 	
-	public Position getCursorPos() {
-		return new Position(GLFW.getCursorPosX(glfwWindow), GLFW.getCursorPosY(glfwWindow));
+	public DoubleXY getCursorPos() {
+		return new DoubleXY(GLFW.getCursorPosX(glfwWindow), GLFW.getCursorPosY(glfwWindow));
 	}
 	
 	public void setTitle(String title) {
@@ -286,7 +267,7 @@ public class Window {
 
 	// User events
 	
-	protected void frame() {
+	protected void frame(Canvas cnv) {
 		
 	}
 	

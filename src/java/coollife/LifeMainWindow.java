@@ -1,12 +1,11 @@
 package coollife;
 
+import firststep.Canvas;
+import firststep.DoubleXY;
 import firststep.Window;
-import firststep.internal.GL3W;
 import firststep.internal.GLFW;
 import firststep.internal.NVG;
-import firststep.internal.OS;
-import firststep.internal.GLFW.Callback;
-import firststep.internal.GLFW.CallbackAdapter;
+import firststep.internal.NVG.Color;
 
 public class LifeMainWindow extends Window {
 	
@@ -74,7 +73,7 @@ public class LifeMainWindow extends Window {
 
 	private void cellUnderMouse(int winWidth, int winHeight)
 	{
-	    Position mPos = getCursorPos();
+	    DoubleXY mPos = getCursorPos();
 
 	    float k = calcScale(winWidth, winHeight);
 	    float x0 = winWidth / 2 - (field.getWidth() * k / 2);
@@ -99,59 +98,58 @@ public class LifeMainWindow extends Window {
 	private long frameIndex = 0;
 	
 	@Override
-	protected void frame() {
+	protected void frame(Canvas cnv) {
 		float k = calcScale(getWidth(), getHeight());
 	    
 	    float x0 = getWidth() / 2 - (field.getWidth() * k / 2);
 	    float y0 = getHeight() / 2 - (field.getHeight() * k / 2);
 	    
-	    long vg = nanoVGContext;
 	    // Painting dark cells
-        NVG.beginPath(vg);
-        NVG.fillColor(vg, new NVG.Color(0, 0, 0));
+        cnv.beginPath();
+        cnv.fillColor(new NVG.Color(0, 0, 0));
 	    for (int i = 0; i < field.getWidth(); i++)
 	    for (int j = 0; j < field.getHeight(); j++)
 	    {
 	        if (!field.getCell(i, j))
 	        {
-		        NVG.rect(vg, x0 + i * k, y0 + j * k, k, k);
+		        cnv.rect(x0 + i * k, y0 + j * k, k, k);
 	        }
 	    }
-        NVG.fill(vg);
+        cnv.fill();
 
 	    // Painting light cells
-        NVG.beginPath(vg);
-        NVG.fillColor(vg, new NVG.Color(192, 192, 192));
+        cnv.beginPath();
+        cnv.fillColor(new NVG.Color(192, 192, 192));
 	    for (int i = 0; i < field.getWidth(); i++)
 	    for (int j = 0; j < field.getHeight(); j++)
 	    {
 	        if (field.getCell(i, j))
 	        {
-		        NVG.rect(vg, x0 + i * k, y0 + j * k, k, k);
+		        cnv.rect(x0 + i * k, y0 + j * k, k, k);
 	        }
 	    }
-        NVG.fill(vg);
+        cnv.fill();
 
 	    
 	    // Painting lines between cells
-        NVG.beginPath(vg);
-        NVG.strokeColor(vg, new NVG.Color(64, 64, 64, 255));
+        cnv.beginPath();
+        cnv.strokeColor(new NVG.Color(64, 64, 64, 255));
         if (k > 8)
         {
 		    for (int i = 0; i < field.getWidth(); i++)
 		    for (int j = 0; j < field.getHeight(); j++)
 		    {
-		        NVG.rect(vg, x0 + i * k, y0 + j * k, k, k);
+		        cnv.rect(x0 + i * k, y0 + j * k, k, k);
 		    }
         }
-        NVG.stroke(vg);
+        cnv.stroke();
 	    
 	    if (mouseI >= 0 && mouseI < field.getWidth() && mouseJ >= 0 && mouseJ < field.getHeight())
 	    {
-	        NVG.fillColor(vg, new NVG.Color(255, 255, 255, 64));
-	        NVG.beginPath(vg);
-	        NVG.rect(vg, x0 + mouseI * k, y0 + mouseJ * k, k, k);
-	        NVG.fill(vg);
+	        cnv.fillColor(new NVG.Color(255, 255, 255, 64));
+	        cnv.beginPath();
+	        cnv.rect(x0 + mouseI * k, y0 + mouseJ * k, k, k);
+	        cnv.fill();
 	    }
 
 		if (!isPaused && frameIndex % 2 == 0) {
@@ -164,7 +162,7 @@ public class LifeMainWindow extends Window {
 	
 	public LifeMainWindow() {
 		super (APPNAME, 600, 400);
-		
+		setBackground(new Color(0.2f, 0.2f, 0.2f, 1.0f));
 		field = new Cells(100, 70);
 	}
 	
