@@ -3,8 +3,6 @@ package firststep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import firststep.Font.FontExistsException;
-import firststep.Image.Flags;
 import firststep.internal.GLFW;
 import firststep.internal.NVG;
 
@@ -251,6 +249,54 @@ public class Canvas {
 	public void rotate(float angle) {
 		NVG.rotate(nanoVGContext, angle);
 	}
+	
+	public void resetTransform() {
+		NVG.resetTransform(nanoVGContext);
+	}
+	
+	public void translate(float x, float y) {
+		NVG.translate(nanoVGContext, x, y);
+	}
+	
+	public void scale(float x, float y) {
+		NVG.scale(nanoVGContext, x, y);
+	}
+	
+	public void strokePaint(Paint paint) {
+		NVG.strokePaint(nanoVGContext, paint.paint);
+	}
+	
+	public void miterLimit(float limit) {
+		NVG.miterLimit(nanoVGContext, limit);
+	}
+
+	public void globalAlpha(float alpha) {
+		NVG.globalAlpha(nanoVGContext, alpha);
+	}
+	
+	public void setTransform(Transform t) {
+		t.transform.setContextTransform(nanoVGContext);
+	}
+	
+	public Transform getTransform() {
+		NVG.Transform res = new NVG.Transform();
+		res.getContextTransform(nanoVGContext);
+		return new Transform(res);
+	}
+	
+	public void skewX(float angle) {
+		NVG.skewX(nanoVGContext, angle);
+	}
+
+	public void skewY(float angle) {
+		NVG.skewY(nanoVGContext, angle);
+	}
+
+	public void arcTo(float x1, float y1, float x2, float y2, float radius) {
+		NVG.arcTo(nanoVGContext, x1, y1, x2, y2, radius);
+	}
+	
+	//...
 	
 	public Font findFont(String name) {
 		return Font.find(this, name);

@@ -6,6 +6,10 @@ import java.nio.ByteOrder;
 
 public class NVG {
 
+	static {
+		System.loadLibrary("firststep");
+	}
+
 	public static class Color {
 
 		FloatBuffer buff; // must be called buff see void* getBuffPtr(JNIEnv *e,
@@ -108,10 +112,6 @@ public class NVG {
 		}
 	}
 
-	static {
-		System.loadLibrary("firststep");
-	}
-
 	// TODO should there be a native routine that returns sizeof for
 	// structs used by the sub class buffers?
 
@@ -124,7 +124,7 @@ public class NVG {
 		public Transform() {
 			buff = ByteBuffer.allocateDirect(6 * 4)
 					.order(ByteOrder.nativeOrder()).asFloatBuffer();
-			identity();
+			//identity();
 		}
 
 		public void identity() {

@@ -3,6 +3,7 @@ package coollife;
 import firststep.Canvas;
 import firststep.Color;
 import firststep.DoubleXY;
+import firststep.Transform;
 import firststep.Window;
 
 
