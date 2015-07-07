@@ -33,11 +33,11 @@ public class Image {
 	
 	Image(Canvas cnv, String filename, Flags imageFlags) {
 		canvas = cnv;
-		id = NVG.createImage(canvas.getNanoVGContext(), filename, imageFlags.id);
+		id = NVG.createImage(canvas.nanoVGContext, filename, imageFlags.id);
 	}
 	
 	public void delete() {
-		NVG.deleteImage(canvas.getNanoVGContext(), id);
+		NVG.deleteImage(canvas.nanoVGContext, id);
 		isDeleted = true;
 	}
 	

@@ -3,6 +3,7 @@ package firststep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import firststep.Font.FontExistsException;
 import firststep.Image.Flags;
 import firststep.internal.GLFW;
 import firststep.internal.NVG;
@@ -94,12 +95,8 @@ public class Canvas {
 		return Logger.getLogger(Window.class.getName(), null);
 	}
 
-	private long nanoVGContext;
-	
-	long getNanoVGContext() {
-		return nanoVGContext;
-	}
-	
+	long nanoVGContext;
+
 	Canvas(Window window) {
 		window.makeContextCurrent();
 		nanoVGContext = NVG.create(firststep.internal.NVG.NVG_ANTIALIAS | firststep.internal.NVG.NVG_STENCIL_STROKES | firststep.internal.NVG.NVG_DEBUG);
@@ -233,6 +230,34 @@ public class Canvas {
 	
 	public void textAlign(HAlign hAlign, VAlign vAlign) {
 		NVG.textAlign(nanoVGContext, hAlign.id | vAlign.id);
+	}
+	
+	public void fontBlur(float blur) {
+		NVG.fontBlur(nanoVGContext, blur);
+	}
+	
+	public void text(float x, float y, String message) {
+		NVG.text(nanoVGContext, x, y, message);
+	}
+	
+	public Font createFont(String name, String path) {
+		try {
+			return new Font(this, name, path);
+		} catch (Font.FontExistsException e) {
+			return Font.find(e.fontId);
+		}
+	}
+	
+	public void rotate(float angle) {
+		NVG.rotate(nanoVGContext, angle);
+	}
+	
+	public Font findFont(String name) {
+		return Font.find(this, name);
+	}
+	
+	public void fontFace(Font font) {
+		NVG.fontFaceId(nanoVGContext, font.id);
 	}
 	
 	public Paint imagePattern(float ox, float oy, float ex, float ey, float angle, Image image, float alpha) {
