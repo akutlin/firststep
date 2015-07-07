@@ -31,16 +31,32 @@ public class NVG {
 			this(0f, 0f, 0f, 1f);
 		}
 
+		public float getRed() {
+			return buff.get(0);
+		}
+		
 		public void setRed(float r) {
 			buff.put(0, r);
+		}
+
+		public float getGreen() {
+			return buff.get(1);
 		}
 
 		public void setGreen(float g) {
 			buff.put(1, g);
 		}
 
+		public float getBlue() {
+			return buff.get(2);
+		}
+
 		public void setBlue(float b) {
 			buff.put(2, b);
+		}
+
+		public float getAlpha() {
+			return buff.get(3);
 		}
 
 		public void setAlpha(float a) {
