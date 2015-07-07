@@ -3,7 +3,7 @@ package firststep;
 import firststep.internal.NVG;
 
 public class Color {
-	private NVG.Color nvgColor;
+	NVG.Color nvgColor;
 	
 	Color(NVG.Color c) {
 		this.nvgColor = c;
@@ -19,10 +19,6 @@ public class Color {
 
 	public Color(int red, int green, int blue) {
 		nvgColor = new NVG.Color(red, green, blue);
-	}
-
-	NVG.Color getNVGColor() {
-		return nvgColor;
 	}
 
 	public float getRed() {

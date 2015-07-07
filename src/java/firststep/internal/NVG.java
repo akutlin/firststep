@@ -71,7 +71,7 @@ public class NVG {
 		}
 	}
 	
-	public class Paint {
+	public static class Paint {
 		
 		FloatBuffer buff;  // must be called buff see void* getBuffPtr(JNIEnv *e, jobject jo)
 		
@@ -383,10 +383,8 @@ public class NVG {
 
 	public static native void strokePaint(long ctx, Paint paint);
 
-	public static native void miterLimit(long ctx, float limit); // no idea what
-																	// this
-																	// does....
-
+	public static native void miterLimit(long ctx, float limit); 
+	
 	public static native void globalAlpha(long ctx, float alpha);
 
 	public static native void transform(long ctx, float a, float b, float c,
