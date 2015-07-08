@@ -12,9 +12,9 @@ public class Canvas {
 	 * Line caps
 	 */
 	public enum LineCap {
-		NVG_BUTT(0),
-		NVG_ROUND(1),
-		NVG_SQUARE(2);
+		BUTT(0),
+		ROUND(1),
+		SQUARE(2);
 		
 		final int id;
 		LineCap(int id) {
@@ -32,9 +32,9 @@ public class Canvas {
 	 * Line joins
 	 */
 	public enum LineJoin {
-		NVG_ROUND(1),
-		NVG_BEVEL(3),
-		NVG_MITER(4);
+		ROUND(1),
+		BEVEL(3),
+		MITER(4);
 		
 		final int id;
 		LineJoin(int id) {
@@ -88,6 +88,26 @@ public class Canvas {
 			throw new RuntimeException("Incorrect id");
 		}
 	}
+	
+	/**
+	 * Winding (solid shape or hole)
+	 */
+	public enum Winding {
+		CCW(1),			// Winding for solid shapes
+		CW(2);			// Winding for holes
+		
+		final int id;
+		Winding(int id) {
+			this.id = id;
+		}
+		static Winding fromId(int id) {
+			for (Winding v : Winding.values()) {
+				if (v.id == id) return v;
+			}
+			throw new RuntimeException("Incorrect id");
+		}
+	}
+
 	
 	private static Logger getLogger() {
 		return Logger.getLogger(Window.class.getName(), null);
@@ -296,6 +316,18 @@ public class Canvas {
 		NVG.arcTo(nanoVGContext, x1, y1, x2, y2, radius);
 	}
 	
+	public void pathWinding(Winding dir) {
+		NVG.pathWinding(nanoVGContext, dir.id);
+	}
+
+	public void arc(float cx, float cy, float radius, float a0, float a1, Winding dir) {
+		NVG.arc(nanoVGContext, cx, cy, radius, a0, a1, dir.id);
+	}
+
+	public void ellipse(float cx, float cy, float rx, float ry) {
+		NVG.ellipse(nanoVGContext, cx, cy, rx, ry);
+	}
+
 	//...
 	
 	public Font findFont(String name) {
