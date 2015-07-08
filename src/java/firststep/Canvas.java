@@ -327,9 +327,15 @@ public class Canvas {
 	public void ellipse(float cx, float cy, float rx, float ry) {
 		NVG.ellipse(nanoVGContext, cx, cy, rx, ry);
 	}
-
-	//...
 	
+	public void textLetterSpacing(float spacing) {
+		NVG.textLetterSpacing(nanoVGContext, spacing);
+	}
+
+	public void textLineHeight(float lineHeight) {
+		NVG.textLineHeight(nanoVGContext, lineHeight);
+	}
+
 	public Font findFont(String name) {
 		return Font.find(this, name);
 	}
