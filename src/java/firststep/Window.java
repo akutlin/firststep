@@ -396,7 +396,12 @@ public class Window {
 			openedWindows.keySet().removeAll(toErase);
 		
 			for (Window window : openedWindows.values()) {
-				window.internalDraw();
+				if (window.justCreated) {
+					window.justCreated = false;
+					window.internalWindowSize(window.width, window.height);
+				} else {
+					window.internalDraw();
+				}
 			}			
 			
 			GLFW.pollEvents();
@@ -416,12 +421,13 @@ public class Window {
 	private Canvas canvas;
 	private Color background = new Color(0f, 0f, 0f, 1f);
 	private int width, height;
+	private boolean justCreated;
 	
 	long getGLFWWindow() {
 		return glfwWindow;
 	}
 	
-	public Window(String title, int width, int height) {
+	public Window(String title, int width, int height, Color background) {
 		if (OS.getPlatform() == OS.Platform.OSX) {
 			// We initialize OpenGL 3.2 Core profile on OSX cause
 			// it is the only GL3 that Apple knows.
@@ -458,14 +464,14 @@ public class Window {
 		getLogger().log(Level.INFO, "GL version: " + GL3W.getGLVersionMajor() + "." + GL3W.getGLVersionMinor());
 		getLogger().log(Level.INFO, "GLSL version: " + GL3W.getGLSLVersionMajor() + "." + GL3W.getGLSLVersionMinor());
 
-		canvas = new Canvas(this);
-		
+		this.background = background;
 		this.width = width;
 		this.height = height;
+
+		canvas = new Canvas(this);
 		
-		synchronized (openedWindows) {
-			openedWindows.put(glfwWindow, this);
-		}
+		openedWindows.put(glfwWindow, this);
+		justCreated = true;
 	}
 	
 	private void internalDraw() {
