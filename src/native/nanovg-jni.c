@@ -9,6 +9,7 @@
 #include <nanovg.h>
 #define NANOVG_GL3_IMPLEMENTATION
 #include <nanovg_gl.h>
+#include <nanovg_gl_utils.h>
 
 #define checkJO(JO, MSG) if (JO==NULL) { printf(MSG); fflush(stdout); }
 
@@ -46,31 +47,6 @@ void* getBuffPtr(JNIEnv *e, jobject jo)
 	jobject jbuff = (*e)->GetObjectField(e, jo, fid);
 	return (*e)->GetDirectBufferAddress(e, jbuff);
 }
-
-// given a jni env and NVGpaint this creates a java object
-// encapsulating the NVGpaint structure (nvg.Paint)
-
-/* depricated
-jobject createPaintJobject(JNIEnv *e, NVGpaint p) {
-	jclass cls = (*e)->FindClass(e, "nvg$Paint");
-	assert(cls != NULL);
-
-	jmethodID constructor = (*e)->GetMethodID(e, cls, "<init>", "()V");
-	assert(constructor != NULL);
-
-	jobject nvgpaint = (*e)->NewObject(e, cls, constructor);
-	assert(nvgpaint!=NULL);
-
-	jfieldID fid = (*e)->GetFieldID(e, cls,"buff","Ljava/nio/FloatBuffer;");
-	assert(fid != NULL);
-	jobject jbuff = (*e)->GetObjectField(e, nvgpaint, fid);
-	assert(jbuff != NULL);
-	NVGpaint* ptr = (void*)(*e)->GetDirectBufferAddress(e, jbuff);
-	assert(ptr!=NULL);
-	*ptr = p;
-	return nvgpaint;
-}
-*/
 
 JNIEXPORT jlong JNICALL Java_firststep_internal_NVG_test
   (JNIEnv *e, jclass c, jint i)
@@ -245,6 +221,19 @@ JNIEXPORT int JNICALL Java_firststep_internal_NVG_createImage
 
     (*e)->ReleaseStringUTFChars(e, fname, filename);
 	return r;
+}
+
+//void nvgImageSize(NVGcontext* ctx, int image, int* w, int* h);
+JNIEXPORT void JNICALL Java_firststep_internal_NVG_imageSize
+  (JNIEnv *e, jclass c, jlong ctx, jint image, jintArray dims)
+{
+	int w, h;
+	nvgImageSize((NVGcontext*)ctx, image, &w, &h);
+
+	jint *dimsArray = (*e)->GetIntArrayElements(e, dims, 0);
+	dimsArray[0] = w;
+	dimsArray[1] = h;
+	(*e)->ReleaseIntArrayElements(e, dims, dimsArray, 0);
 }
 
 JNIEXPORT void JNICALL Java_firststep_internal_NVG_deleteImage
@@ -513,4 +502,20 @@ JNIEXPORT void JNICALL Java_firststep_internal_NVG__1_1setTransform
 	float* src = (float*)getBuffPtr(e,jsrc);
 	nvgResetTransform((NVGcontext*)ctx);
 	nvgTransform((NVGcontext*)ctx, src[0], src[1], src[2], src[3], src[4], src[5] );
+}
+
+JNIEXPORT jlong Java_firststep_internal_NVG_createFramebuffer(JNIEnv *e, jclass c, jlong ctx, jint w, jint h, jint imageFlags) {
+	return (jlong)nvgluCreateFramebuffer((NVGcontext*)ctx, w, h, imageFlags);
+}
+
+JNIEXPORT void Java_firststep_internal_NVG_bindFramebuffer(JNIEnv *e, jclass c, jlong fb) {
+	nvgluBindFramebuffer((NVGLUframebuffer*)fb);
+}
+
+JNIEXPORT void Java_firststep_internal_NVG_deleteFramebuffer(JNIEnv *e, jclass c, jlong fb) {
+	nvgluDeleteFramebuffer((NVGLUframebuffer*)fb);
+}
+
+JNIEXPORT jint Java_firststep_internal_NVG_getImageFromFramebuffer(JNIEnv *e, jclass c, jlong fb) {
+	return ((NVGLUframebuffer*)fb)->image;
 }
