@@ -7,7 +7,12 @@
 #include <GL3/gl3w.h>
 
 #include <nanovg.h>
-#define NANOVG_GL3_IMPLEMENTATION
+//#define NANOVG_GL3_IMPLEMENTATION
+
+#define NANOVG_GL3 1
+#define NANOVG_GL_IMPLEMENTATION 1
+#define NANOVG_GL_USE_UNIFORMBUFFER 0
+
 #include <nanovg_gl.h>
 #include <nanovg_gl_utils.h>
 
