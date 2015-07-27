@@ -1,5 +1,6 @@
 package firststep;
 
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,6 +9,8 @@ import firststep.internal.NVG;
 
 public class Canvas {
 	
+	HashMap<Integer, Image> allImages = new HashMap<>();
+
 	/**
 	 * Line caps
 	 */
@@ -107,13 +110,13 @@ public class Canvas {
 			throw new RuntimeException("Incorrect id");
 		}
 	}
-
 	
 	private static Logger getLogger() {
 		return Logger.getLogger(Window.class.getName(), null);
 	}
 
 	long nanoVGContext;
+	Framebuffer mainFramebuffer;
 
 	Canvas(Window window) {
 		window.makeContextCurrent();
@@ -123,7 +126,11 @@ public class Canvas {
 			throw new RuntimeException("NanoVG can't create a context for the window");
 		}
 		getLogger().log(Level.INFO, "NanoVG context is created");
-
+		mainFramebuffer = new Framebuffer(this, window.getWidth(), window.getHeight(), 0);
+	}
+	
+	public Framebuffer getMainFramebuffer() {
+		return mainFramebuffer;
 	}
 	
 	void beginFrame(int width, int height, float ratio) {
@@ -153,7 +160,7 @@ public class Canvas {
 	public void lineTo(float x, float y) {
 		NVG.lineTo(nanoVGContext, x, y);
 	}
-
+	
 	public void strokeColor(Color color) {
 		NVG.strokeColor(nanoVGContext, color.nvgColor);
 	}
@@ -216,6 +223,10 @@ public class Canvas {
 	
 	public Image createImage(String filename, Image.Flags imageFlags) {
 		return new Image(this, filename, imageFlags);
+	}
+	
+	public Framebuffer createFramebuffer(int width, int height, Image.Flags imageFlags) {
+		return new Framebuffer(this, width, height, imageFlags);
 	}
 	
 	public void roundedRect(float x, float y, float width, float height, float r) {

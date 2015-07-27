@@ -482,15 +482,15 @@ public class Window {
 		float pxRatio = (float)fbWidth / (float)width;
 
 		GLFW.makeContextCurrent(glfwWindow);
-		GL3W.glViewport(0, 0, fbWidth, fbHeight);
+		/*GL3W.glViewport(0, 0, fbWidth, fbHeight);
 		GL3W.glClearColor(background.getRed(), background.getGreen(), background.getBlue(), background.getAlpha());
 		GL3W.glClear(GL3W.GL_COLOR_BUFFER_BIT | GL3W.GL_STENCIL_BUFFER_BIT | GL3W.GL_DEPTH_BUFFER_BIT);
 		
-		canvas.beginFrame(width, height, pxRatio);
+		canvas.beginFrame(width, height, pxRatio);*/
 
 		frame(canvas);
 		
-        canvas.endFrame();
+        //canvas.endFrame();
 
         GLFW.swapBuffers(glfwWindow);
 	}
@@ -503,6 +503,8 @@ public class Window {
 		windowSize(width, height);
 		this.width = width;
 		this.height = height;
+		this.canvas.mainFramebuffer.width = width;
+		this.canvas.mainFramebuffer.height = height;
 		internalDraw();
 	}
 

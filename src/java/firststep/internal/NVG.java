@@ -345,6 +345,8 @@ public class NVG {
 
 	public static native int createImage(long ctx, String filename,
 			int imageFlags);
+	
+	public static native void imageSize(long ctx, int image, int[] dims);
 
 	public static native void deleteImage(long ctx, int image);
 
@@ -412,4 +414,13 @@ public class NVG {
 	public static native int findFont(long ctx, String name);
 
 	public static native void fontFaceId(long ctx, int font);
+	
+	public static native long createFramebuffer(long ctx, int w, int h, int imageFlags);
+
+	public static native void bindFramebuffer(long fb);
+
+	public static native void deleteFramebuffer(long fb);
+	
+	public static native int getImageFromFramebuffer(long fb);
+
 }
