@@ -1,15 +1,26 @@
 package firststep;
 
+import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.List;
+
 import firststep.internal.GL3W;
 import firststep.internal.NVG;
 
 public class Framebuffer {
+	
+	public interface DrawListener {
+		void draw(Canvas cnv);
+	}
 	
 	long id;
 	int width, height;
 
 	private Canvas canvas;
 	private boolean isDeleted;
+	
+	private DrawListener drawListener;
+	private List<Framebuffer> dependencies = new ArrayList<>();
 	
 	Framebuffer(Canvas cnv, int width, int height, Image.Flags imageFlags) {
 		canvas = cnv;
@@ -26,8 +37,10 @@ public class Framebuffer {
 	}
 	
 	public void delete() {
-		NVG.deleteFramebuffer(id);
-		isDeleted = true;
+		if (!isDeleted) {
+			NVG.deleteFramebuffer(id);
+			isDeleted = true;
+		}
 	}
 	
 	public boolean isDeleted() {
@@ -44,7 +57,7 @@ public class Framebuffer {
 		}
 	}
 	
-	public void beginDrawing(float pxRatio) {
+	private void beginDrawing(float pxRatio) {
 		IntXY fboSize;
 		if (id == 0) {
 			// TODO Implement getFramebufferSize
@@ -68,8 +81,41 @@ public class Framebuffer {
 		NVG.beginFrame(canvas.nanoVGContext, winWidth, winHeight, pxRatio);
 	}
 	
-	public void endDrawing() {
+	private void endDrawing() {
 		NVG.endFrame(canvas.nanoVGContext);
 		NVG.bindFramebuffer(0);
+	}
+	
+	void draw(Canvas canvas) {
+		if (drawListener != null) {
+			for (Framebuffer fb : dependencies) {
+				fb.draw(canvas);
+			}
+			beginDrawing(1.0f); // TODO: fix
+			drawListener.draw(canvas);
+			endDrawing();
+		}
+	}
+
+	public void setDrawListener(DrawListener drawListener) {
+		this.drawListener = drawListener;
+	}
+	
+	public void addDependency(Framebuffer dep) {
+		dependencies.add(dep);
+	}
+	
+	public void removeDependency(Framebuffer dep) {
+		dependencies.remove(dep);
+	}
+	
+	public void clearDependencies() {
+		dependencies.clear();
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		delete();
+		super.finalize();
 	}
 }

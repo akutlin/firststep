@@ -116,8 +116,7 @@ public class Canvas {
 	}
 
 	long nanoVGContext;
-	Framebuffer mainFramebuffer;
-
+	
 	Canvas(Window window) {
 		window.makeContextCurrent();
 		nanoVGContext = NVG.create(firststep.internal.NVG.NVG_ANTIALIAS | firststep.internal.NVG.NVG_STENCIL_STROKES | firststep.internal.NVG.NVG_DEBUG);
@@ -126,11 +125,6 @@ public class Canvas {
 			throw new RuntimeException("NanoVG can't create a context for the window");
 		}
 		getLogger().log(Level.INFO, "NanoVG context is created");
-		mainFramebuffer = new Framebuffer(this, window.getWidth(), window.getHeight(), 0);
-	}
-	
-	public Framebuffer getMainFramebuffer() {
-		return mainFramebuffer;
 	}
 	
 	void beginFrame(int width, int height, float ratio) {

@@ -423,6 +423,8 @@ public class Window {
 	private int width, height;
 	private boolean justCreated;
 	
+	private Framebuffer mainFramebuffer;
+	
 	long getGLFWWindow() {
 		return glfwWindow;
 	}
@@ -472,6 +474,7 @@ public class Window {
 		
 		openedWindows.put(glfwWindow, this);
 		justCreated = true;
+		
 	}
 	
 	private void internalDraw() {
@@ -488,7 +491,8 @@ public class Window {
 		
 		canvas.beginFrame(width, height, pxRatio);*/
 
-		frame(canvas);
+		//frame(canvas);
+		mainFramebuffer.draw(canvas);
 		
         //canvas.endFrame();
 
@@ -500,11 +504,13 @@ public class Window {
 	}
 	
 	public void internalWindowSize(int width, int height) {
+		mainFramebuffer = new Framebuffer(canvas, width, height, 0);
+
 		windowSize(width, height);
 		this.width = width;
 		this.height = height;
-		this.canvas.mainFramebuffer.width = width;
-		this.canvas.mainFramebuffer.height = height;
+
+
 		internalDraw();
 	}
 
@@ -544,12 +550,16 @@ public class Window {
 		return height;
 	}
 
-	// User events
-	
-	protected void frame(Canvas cnv) {
-		
+	public Framebuffer getMainFramebuffer() {
+		return mainFramebuffer;
 	}
 	
+	public Framebuffer createFramebuffer(int width, int height, Image.Flags imageFlags) {
+		return canvas.createFramebuffer(width, height, imageFlags);
+	}
+	
+	// User events
+		
 	protected void windowSize(int width, int height) {
 		
 	}
