@@ -1,6 +1,5 @@
 package firststep;
 
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +12,10 @@ public class Framebuffer {
 		void draw(Canvas cnv);
 	}
 	
-	long id;
-	int width, height;
+	private long id;
+	private int width, height;
+	private Image.Flags imageFlags;
+	private Color background = new Color(0f, 0f, 0f, 0f);
 
 	private Canvas canvas;
 	private boolean isDeleted;
@@ -27,6 +28,7 @@ public class Framebuffer {
 		id = NVG.createFramebuffer(cnv.nanoVGContext, width, height, imageFlags.toFlags());
 		this.width = width;
 		this.height = height;
+		this.imageFlags = imageFlags;
 	}
 	
 	Framebuffer(Canvas cnv, int width, int height, long id) {
@@ -34,6 +36,16 @@ public class Framebuffer {
 		this.id = id;
 		this.width = width;
 		this.height = height;
+	}
+	
+	public void resize(int newWidth, int newHeight) {
+		if (id == 0) {
+			this.width = newWidth;
+			this.height = newHeight;
+		} else {
+			NVG.deleteFramebuffer(id);
+			id = NVG.createFramebuffer(canvas.nanoVGContext, width, height, imageFlags.toFlags());
+		}
 	}
 	
 	public void delete() {
@@ -71,11 +83,7 @@ public class Framebuffer {
 
 		NVG.bindFramebuffer(id);
 		GL3W.glViewport(0, 0, fboSize.getX(), fboSize.getY());
-		if (id != 0) {
-			GL3W.glClearColor(0, 0, 0, 0);
-		} else {
-			GL3W.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-		}
+		GL3W.glClearColor(background.getRed(), background.getGreen(), background.getBlue(), background.getAlpha());
 		
 		GL3W.glClear(GL3W.GL_COLOR_BUFFER_BIT | GL3W.GL_STENCIL_BUFFER_BIT | GL3W.GL_DEPTH_BUFFER_BIT);
 		NVG.beginFrame(canvas.nanoVGContext, winWidth, winHeight, pxRatio);
@@ -111,6 +119,10 @@ public class Framebuffer {
 	
 	public void clearDependencies() {
 		dependencies.clear();
+	}
+	
+	void setBackground(Color background) {
+		this.background = background;
 	}
 	
 	@Override

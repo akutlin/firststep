@@ -423,7 +423,7 @@ public class Window {
 	private int width, height;
 	private boolean justCreated;
 	
-	private Framebuffer mainFramebuffer;
+	private Framebuffer rootFramebuffer;
 	
 	long getGLFWWindow() {
 		return glfwWindow;
@@ -485,16 +485,8 @@ public class Window {
 		float pxRatio = (float)fbWidth / (float)width;
 
 		GLFW.makeContextCurrent(glfwWindow);
-		/*GL3W.glViewport(0, 0, fbWidth, fbHeight);
-		GL3W.glClearColor(background.getRed(), background.getGreen(), background.getBlue(), background.getAlpha());
-		GL3W.glClear(GL3W.GL_COLOR_BUFFER_BIT | GL3W.GL_STENCIL_BUFFER_BIT | GL3W.GL_DEPTH_BUFFER_BIT);
-		
-		canvas.beginFrame(width, height, pxRatio);*/
-
-		//frame(canvas);
-		mainFramebuffer.draw(canvas);
-		
-        //canvas.endFrame();
+		rootFramebuffer.setBackground(background);
+		rootFramebuffer.draw(canvas);
 
         GLFW.swapBuffers(glfwWindow);
 	}
@@ -504,12 +496,15 @@ public class Window {
 	}
 	
 	public void internalWindowSize(int width, int height) {
-		mainFramebuffer = new Framebuffer(canvas, width, height, 0);
+		if (rootFramebuffer == null) {
+			rootFramebuffer = new Framebuffer(canvas, width, height, 0);
+		} else {
+			rootFramebuffer.resize(width, height);
+		}
 
 		windowSize(width, height);
 		this.width = width;
 		this.height = height;
-
 
 		internalDraw();
 	}
@@ -534,24 +529,20 @@ public class Window {
 		this.background = background;
 	}
 	
-	public void setWidth(int width) {
-		this.width = width;
-	}
-	
 	public int getWidth() {
 		return width;
-	}
-	
-	public void setHeight(int height) {
-		this.height = height;
 	}
 	
 	public int getHeight() {
 		return height;
 	}
 
+	public void setSize(int width, int height) {
+		internalWindowSize(width, height);
+	}
+	
 	public Framebuffer getMainFramebuffer() {
-		return mainFramebuffer;
+		return rootFramebuffer;
 	}
 	
 	public Framebuffer createFramebuffer(int width, int height, Image.Flags imageFlags) {
