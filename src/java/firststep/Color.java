@@ -9,47 +9,30 @@ public class Color {
 		this.nvgColor = c;
 	}
 	
+	private float red, green, blue, alpha;
+	
 	public Color(float red, float green, float blue, float alpha) {
-		nvgColor = new NVG.Color(red, green, blue, alpha);
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
+		this.alpha = alpha;
+		
+		nvgColor = NVG.Color.fromRGBA(red, green, blue, alpha);
 	}
 	
-	public Color(int red, int green, int blue, int alpha) {
-		nvgColor = new NVG.Color(red, green, blue, alpha);
-	}
-
-	public Color(int red, int green, int blue) {
-		nvgColor = new NVG.Color(red, green, blue);
-	}
-
 	public float getRed() {
-		return nvgColor.getRed();
+		return red;
 	}
-
-	public void setRed(float red) {
-		nvgColor.setRed(red);
-	}
-
+	
 	public float getGreen() {
-		return nvgColor.getGreen();
+		return green;
 	}
-
-	public void setGreen(float green) {
-		nvgColor.setGreen(green);
-	}
-
+	
 	public float getBlue() {
-		return nvgColor.getBlue();
-	}
-
-	public void setBlue(float blue) {
-		nvgColor.setBlue(blue);
+		return blue;
 	}
 	
 	public float getAlpha() {
-		return nvgColor.getAlpha();
-	}
-
-	public void setAlpha(float alpha) {
-		nvgColor.setAlpha(alpha);
+		return alpha;
 	}
 }

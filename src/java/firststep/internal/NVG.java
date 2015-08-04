@@ -1,8 +1,8 @@
 package firststep.internal;
 
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 public class NVG {
 
@@ -12,67 +12,19 @@ public class NVG {
 
 	public static class Color {
 
-		FloatBuffer buff; // must be called buff see void* getBuffPtr(JNIEnv *e,
-							// jobject jo)
+		private long ptr;
 
-		public Color(int r, int g, int b) {
-			this(r, g, b, 255);
-		}
-
-		public Color(int r, int g, int b, int a) {
-			this((float) r / 255, (float) g / 255, (float) b / 255,	(float) a / 255);
-		}
-
-		public Color(float r, float g, float b, float a) {
-			buff = ByteBuffer.allocateDirect(16).order(ByteOrder.nativeOrder()).asFloatBuffer();
-			buff.put(0, r);
-			buff.put(1, g);
-			buff.put(2, b);
-			buff.put(3, a);
-		}
-
-		public Color() {
-			this(0f, 0f, 0f, 1f);
-		}
-
-		public float getRed() {
-			return buff.get(0);
+		private Color(long ptr) {
+			this.ptr = ptr;
 		}
 		
-		public void setRed(float r) {
-			buff.put(0, r);
+		public static Color fromRGBA(float r, float g, float b, float a) {
+			return new Color(allocRGBA(r, g, b, a));
 		}
-
-		public float getGreen() {
-			return buff.get(1);
-		}
-
-		public void setGreen(float g) {
-			buff.put(1, g);
-		}
-
-		public float getBlue() {
-			return buff.get(2);
-		}
-
-		public void setBlue(float b) {
-			buff.put(2, b);
-		}
-
-		public float getAlpha() {
-			return buff.get(3);
-		}
-
-		public void setAlpha(float a) {
-			buff.put(3, a);
-		}
-
-		public void set(float r, float g, float b, float a) {
-			buff.put(0, r);
-			buff.put(1, g);
-			buff.put(2, b);
-			buff.put(3, a);
-		}
+		
+		private native static long allocRGBA(float r, float g, float b, float a);
+		private native static long allocHSLA(float h, float s, float l, float a);
+		private native static void dealloc(long ptr);
 	}
 	
 	public static class Paint {

@@ -509,6 +509,8 @@ JNIEXPORT void JNICALL Java_firststep_internal_NVG__1_1setTransform
 	nvgTransform((NVGcontext*)ctx, src[0], src[1], src[2], src[3], src[4], src[5] );
 }
 
+// Framebuffers
+
 JNIEXPORT jlong Java_firststep_internal_NVG_createFramebuffer(JNIEnv *e, jclass c, jlong ctx, jint w, jint h, jint imageFlags) {
 	return (jlong)nvgluCreateFramebuffer((NVGcontext*)ctx, w, h, imageFlags);
 }
@@ -523,4 +525,17 @@ JNIEXPORT void Java_firststep_internal_NVG_deleteFramebuffer(JNIEnv *e, jclass c
 
 JNIEXPORT jint Java_firststep_internal_NVG_getImageFromFramebuffer(JNIEnv *e, jclass c, jlong fb) {
 	return ((NVGLUframebuffer*)fb)->image;
+}
+
+// Color
+
+JNIEXPORT jlong Java_firststep_internal_NVG_00024Color_allocRGBA(JNIEnv *e, jfloat r, jfloat g, jfloat b, jfloat a) {
+	void* res = malloc(sizeof(NVGcolor));
+	NVGcolor c = nvgRGBA(r, g, b, a);
+	memcpy(res, &c, sizeof(NVGcolor));
+	return (jlong)res;
+}
+
+JNIEXPORT void Java_firststep_internal_NVG_00024Color_dealloc(JNIEnv *e, jlong ptr) {
+	free((void*)ptr);
 }
