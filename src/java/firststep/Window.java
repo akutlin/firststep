@@ -386,6 +386,8 @@ public class Window {
 		while (!openedWindows.isEmpty()) {
 			double t1 = GLFW.getTime();
 			
+			GLFW.pollEvents();
+
 			// Removing closed windows from the list
 			HashSet<Long> toErase = new HashSet<>();
 			for (Long glfwWindow : openedWindows.keySet()) {
@@ -402,9 +404,7 @@ public class Window {
 				} else {
 					window.internalDraw();
 				}
-			}			
-			
-			GLFW.pollEvents();
+			}
 			
 			double t2 = GLFW.getTime();
 

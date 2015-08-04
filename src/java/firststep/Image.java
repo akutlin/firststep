@@ -30,6 +30,8 @@ public class Image {
 	}
 	
 	public static class Flags {
+		public static final Flags NONE = new Flags(EnumSet.noneOf(Flag.class));
+		
 		private final EnumSet<Flag> values;
 		public Flags(EnumSet<Flag> values) {
 			this.values = values.clone();
