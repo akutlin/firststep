@@ -12,19 +12,20 @@ public class NVG {
 
 	public static class Color {
 
-		private long ptr;
+		FloatBuffer buff;
 
-		private Color(long ptr) {
-			this.ptr = ptr;
+		private Color() {
+			buff = ByteBuffer.allocateDirect(sizeOf()).order(ByteOrder.nativeOrder()).asFloatBuffer();
 		}
 		
 		public static Color fromRGBA(float r, float g, float b, float a) {
-			return new Color(allocRGBA(r, g, b, a));
+			Color res = new Color();
+			res.putRGBA(r, g, b, a);
+			return res;
 		}
 		
-		private native static long allocRGBA(float r, float g, float b, float a);
-		private native static long allocHSLA(float h, float s, float l, float a);
-		private native static void dealloc(long ptr);
+		private native static int sizeOf();
+		private native void putRGBA(float r, float g, float b, float a);
 	}
 	
 	public static class Paint {

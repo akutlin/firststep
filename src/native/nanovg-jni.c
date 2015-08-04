@@ -529,13 +529,12 @@ JNIEXPORT jint Java_firststep_internal_NVG_getImageFromFramebuffer(JNIEnv *e, jc
 
 // Color
 
-JNIEXPORT jlong Java_firststep_internal_NVG_00024Color_allocRGBA(JNIEnv *e, jfloat r, jfloat g, jfloat b, jfloat a) {
-	void* res = malloc(sizeof(NVGcolor));
-	NVGcolor c = nvgRGBA(r, g, b, a);
-	memcpy(res, &c, sizeof(NVGcolor));
-	return (jlong)res;
+JNIEXPORT jint Java_firststep_internal_NVG_00024Color_sizeOf(JNIEnv *e, jclass c) {
+	return sizeof(NVGcolor);
 }
 
-JNIEXPORT void Java_firststep_internal_NVG_00024Color_dealloc(JNIEnv *e, jlong ptr) {
-	free((void*)ptr);
+JNIEXPORT void Java_firststep_internal_NVG_00024Color_putRGBA(JNIEnv *e, jobject o, jfloat r, jfloat g, jfloat b, jfloat a) {
+	NVGcolor c = nvgRGBAf(r, g, b, a);
+	void *ptr = getBuffPtr(e, o);
+	memcpy(ptr, &c, sizeof(NVGcolor));
 }

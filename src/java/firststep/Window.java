@@ -386,6 +386,15 @@ public class Window {
 		while (!openedWindows.isEmpty()) {
 			double t1 = GLFW.getTime();
 			
+			for (Window window : openedWindows.values()) {
+				if (window.justCreated) {
+					window.justCreated = false;
+					window.internalWindowSize(window.width, window.height);
+				} else {
+					window.internalDraw();
+				}
+			}
+
 			GLFW.pollEvents();
 
 			// Removing closed windows from the list
@@ -396,15 +405,6 @@ public class Window {
 				}
 			}
 			openedWindows.keySet().removeAll(toErase);
-		
-			for (Window window : openedWindows.values()) {
-				if (window.justCreated) {
-					window.justCreated = false;
-					window.internalWindowSize(window.width, window.height);
-				} else {
-					window.internalDraw();
-				}
-			}
 			
 			double t2 = GLFW.getTime();
 
