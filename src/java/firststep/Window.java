@@ -478,6 +478,8 @@ public class Window {
 	}
 	
 	private void internalDraw() {
+		frame();
+		
 		int fbWidth = width;	// TODO FramebufferSize
 		int fbHeight = height;	// TODO FramebufferSize
 		
@@ -550,7 +552,11 @@ public class Window {
 	}
 	
 	// User events
+	
+	protected void frame() {
 		
+	}
+	
 	protected void windowSize(int width, int height) {
 		
 	}
