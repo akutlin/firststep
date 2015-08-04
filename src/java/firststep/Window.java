@@ -419,7 +419,7 @@ public class Window {
 
 	private long glfwWindow; 
 	private Canvas canvas;
-	private Color background = new Color(0f, 0f, 0f, 1f);
+	private Color background = Color.fromRGBA(0f, 0f, 0f, 1f);
 	private int width, height;
 	private boolean justCreated;
 	

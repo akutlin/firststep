@@ -538,3 +538,9 @@ JNIEXPORT void Java_firststep_internal_NVG_00024Color_putRGBA(JNIEnv *e, jobject
 	void *ptr = getBuffPtr(e, o);
 	memcpy(ptr, &c, sizeof(NVGcolor));
 }
+
+JNIEXPORT void Java_firststep_internal_NVG_00024Color_putHSLA(JNIEnv *e, jobject o, jfloat h, jfloat s, jfloat l, jfloat a) {
+	NVGcolor c = nvgHSLA(h, s, l, (char)(a * 255));
+	void *ptr = getBuffPtr(e, o);
+	memcpy(ptr, &c, sizeof(NVGcolor));
+}

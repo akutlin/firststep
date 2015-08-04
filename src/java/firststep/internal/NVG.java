@@ -24,8 +24,31 @@ public class NVG {
 			return res;
 		}
 		
+		public static Color fromHSLA(float h, float s, float l, float a) {
+			Color res = new Color();
+			res.putHSLA(h, s, l, a);
+			return res;
+		}
+		
+		public float getRed() {
+			return buff.get(0);
+		}
+		
+		public float getGreen() {
+			return buff.get(1);
+		}
+		
+		public float getBlue() {
+			return buff.get(2);
+		}
+		
+		public float getAlpha() {
+			return buff.get(3);
+		}
+		
 		private native static int sizeOf();
 		private native void putRGBA(float r, float g, float b, float a);
+		private native void putHSLA(float h, float s, float l, float a);
 	}
 	
 	public static class Paint {

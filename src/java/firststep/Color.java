@@ -9,30 +9,29 @@ public class Color {
 		this.nvgColor = c;
 	}
 	
-	private float red, green, blue, alpha;
+	public static Color fromRGBA(float red, float green, float blue, float alpha) {
+		NVG.Color nvgColor = NVG.Color.fromRGBA(red, green, blue, alpha);
+		return new Color(nvgColor);
+	}
 	
-	public Color(float red, float green, float blue, float alpha) {
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
-		this.alpha = alpha;
-		
-		nvgColor = NVG.Color.fromRGBA(red, green, blue, alpha);
+	public static Color fromHSLA(float hue, float saturation, float luminosity, float alpha) {
+		NVG.Color nvgColor = NVG.Color.fromHSLA(hue, saturation, luminosity, alpha);
+		return new Color(nvgColor);
 	}
 	
 	public float getRed() {
-		return red;
+		return nvgColor.getRed();
 	}
 	
 	public float getGreen() {
-		return green;
+		return nvgColor.getGreen();
 	}
 	
 	public float getBlue() {
-		return blue;
+		return nvgColor.getBlue();
 	}
 	
 	public float getAlpha() {
-		return alpha;
+		return nvgColor.getAlpha();
 	}
 }

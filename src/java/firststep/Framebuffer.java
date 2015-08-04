@@ -1,8 +1,6 @@
 package firststep;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import firststep.internal.GL3W;
@@ -17,7 +15,7 @@ public class Framebuffer {
 	private long id;
 	private int width, height;
 	private Image.Flags imageFlags;
-	private Color background = new Color(0f, 0f, 0f, 0f);
+	private Color background = Color.fromRGBA(0f, 0f, 0f, 0f);
 
 	private Canvas canvas;
 	private boolean isDeleted;
