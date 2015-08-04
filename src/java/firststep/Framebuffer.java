@@ -1,7 +1,9 @@
 package firststep;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import firststep.internal.GL3W;
 import firststep.internal.NVG;
@@ -21,7 +23,7 @@ public class Framebuffer {
 	private boolean isDeleted;
 	
 	private DrawListener drawListener;
-	private List<Framebuffer> dependencies = new ArrayList<>();
+	private Set<Framebuffer> dependencies = new HashSet<>();
 	
 	Framebuffer(Canvas cnv, int width, int height, Image.Flags imageFlags) {
 		canvas = cnv;
