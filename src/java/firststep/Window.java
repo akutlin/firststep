@@ -478,7 +478,7 @@ public class Window {
 	}
 	
 	private void internalDraw() {
-		frame();
+		beforeFrame();
 		
 		int fbWidth = width;	// TODO FramebufferSize
 		int fbHeight = height;	// TODO FramebufferSize
@@ -488,6 +488,7 @@ public class Window {
 
 		GLFW.makeContextCurrent(glfwWindow);
 		rootFramebuffer.setBackground(background);
+		rootFramebuffer.setDrawFlag();
 		rootFramebuffer.draw(canvas);
 
         GLFW.swapBuffers(glfwWindow);
@@ -553,7 +554,7 @@ public class Window {
 	
 	// User events
 	
-	protected void frame() {
+	protected void beforeFrame() {
 		
 	}
 	

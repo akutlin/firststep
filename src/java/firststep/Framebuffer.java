@@ -23,6 +23,8 @@ public class Framebuffer {
 	private DrawListener drawListener;
 	private Set<Framebuffer> dependencies = new HashSet<>();
 	
+	private boolean drawFlag = false;
+	
 	Framebuffer(Canvas cnv, int width, int height, Image.Flags imageFlags) {
 		canvas = cnv;
 		id = NVG.createFramebuffer(cnv.nanoVGContext, width, height, imageFlags.toFlags());
@@ -93,15 +95,23 @@ public class Framebuffer {
 		NVG.endFrame(canvas.nanoVGContext);
 		NVG.bindFramebuffer(0);
 	}
+		
+	void setDrawFlag() {
+		drawFlag = true;
+		for (Framebuffer fb : dependencies) {
+			fb.setDrawFlag();
+		}	
+	}
 	
 	void draw(Canvas canvas) {
-		if (drawListener != null) {
+		if (drawListener != null && drawFlag) {
 			for (Framebuffer fb : dependencies) {
 				fb.draw(canvas);
 			}
 			beginDrawing(1.0f); // TODO: fix
 			drawListener.draw(canvas);
 			endDrawing();
+			drawFlag = false;
 		}
 	}
 
