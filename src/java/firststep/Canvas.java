@@ -218,6 +218,10 @@ public class Canvas {
 	public Image createImage(String filename, Image.Flags imageFlags) {
 		return new Image(this, filename, imageFlags);
 	}
+
+	public Image createImageMem(byte[] data, Image.Flags imageFlags) {
+		return new Image(this, data, imageFlags);
+	}
 	
 	public Framebuffer createFramebuffer(int width, int height, Image.Flags imageFlags) {
 		return new Framebuffer(this, width, height, imageFlags);

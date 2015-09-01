@@ -228,6 +228,20 @@ JNIEXPORT int JNICALL Java_firststep_internal_NVG_createImage
 	return r;
 }
 
+JNIEXPORT int JNICALL Java_firststep_internal_NVG_createImageMem
+  (JNIEnv *e, jclass c, jlong ctx, jbyteArray jdata, jint flags)
+{
+	int ndata = (*e)->GetArrayLength(e, jdata);
+	unsigned char* data = (unsigned char*)(*e)->GetByteArrayElements(e, jdata, NULL);
+
+	int r;
+	r = nvgCreateImageMem((NVGcontext*)ctx, flags, data, ndata);
+
+    (*e)->ReleaseByteArrayElements(e, jdata, (jbyte*)data, 0);
+	return r;
+}
+
+
 //void nvgImageSize(NVGcontext* ctx, int image, int* w, int* h);
 JNIEXPORT void JNICALL Java_firststep_internal_NVG_imageSize
   (JNIEnv *e, jclass c, jlong ctx, jint image, jintArray dims)

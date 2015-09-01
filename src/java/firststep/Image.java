@@ -101,6 +101,12 @@ public class Image {
 		canvas.allImages.put(id, this);
 	}
 	
+	Image(Canvas cnv, byte[] data, Flags imageFlags) {
+		canvas = cnv;
+		id = NVG.createImageMem(canvas.nanoVGContext, data, imageFlags.toFlags());
+		canvas.allImages.put(id, this);
+	}
+	
 	Image(Canvas cnv, int id) {
 		canvas = cnv;
 		this.id = id;

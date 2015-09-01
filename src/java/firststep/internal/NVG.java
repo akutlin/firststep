@@ -321,7 +321,10 @@ public class NVG {
 
 	public static native int createImage(long ctx, String filename,
 			int imageFlags);
-	
+
+	public static native int createImageMem(long ctx, byte[] data,
+			int imageFlags);
+
 	public static native void imageSize(long ctx, int image, int[] dims);
 
 	public static native void deleteImage(long ctx, int image);
