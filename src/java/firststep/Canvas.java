@@ -1,6 +1,5 @@
 package firststep;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -365,7 +364,7 @@ public class Canvas {
 	public Paint imagePattern(float ox, float oy, float ex, float ey, float angle, Image image, float alpha) {
 		NVG.Paint res = new NVG.Paint();
 		res.imagePattern(nanoVGContext, ox, oy, ex, ey, angle, image.id, alpha);
-		return new Paint(res);
+		return new Paint(res, image);
 	}
 	
 	public Paint linearGradient(float sx, float sy, float ex, float ey, Color icol, Color ocol) {

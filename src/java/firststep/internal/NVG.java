@@ -259,16 +259,7 @@ public class NVG {
 												// direction when rendered.
 	public static int NVG_IMAGE_PREMULTIPLIED = 1 << 4; // Image data has
 														// premultiplied alpha.
-
-	// TODO nvgCurrentTransform and all the nvgTransform* functions -- use java
-	// ?
-
-	// deg->rad rad->deg use java!
-
-	// definatly TODO
-	// nvgCreateImageMem nvgCreateImageRGBA nvgUpdateImage nvgImageSize
-	// textBox support routines
-
+	
 	static public native long create(int flags);
 
 	public native static void beginFrame(long ctx, int width, int height,

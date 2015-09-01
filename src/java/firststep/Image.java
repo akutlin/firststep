@@ -96,6 +96,7 @@ public class Image {
 
 	private Canvas canvas;
 	private boolean isDeleted;
+	private boolean shouldBeDeleted;
 	
 	Image(Canvas cnv, String filename, Flags imageFlags) throws IOException {
 		canvas = cnv;
@@ -112,9 +113,10 @@ public class Image {
 		canvas.allImages.put(id, new WeakReference<>(this));
 	}
 	
-	Image(Canvas cnv, int id) {
+	Image(Canvas cnv, int id, boolean shouldBeDeleted) {
 		canvas = cnv;
 		this.id = id;
+		this.shouldBeDeleted = shouldBeDeleted;
 		canvas.allImages.put(id, new WeakReference<>(this));
 	}
 	
@@ -136,7 +138,9 @@ public class Image {
 	
 	public void delete() {
 		if (!isDeleted) {
-			NVG.deleteImage(canvas.nanoVGContext, id);
+			if (shouldBeDeleted) {
+				NVG.deleteImage(canvas.nanoVGContext, id);
+			}
 			canvas.allImages.remove(id);
 			isDeleted = true;
 		}

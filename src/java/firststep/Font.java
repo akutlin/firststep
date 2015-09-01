@@ -1,10 +1,13 @@
 package firststep;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import firststep.internal.NVG;
 
 public class Font {
+
+	private static HashMap<Integer, WeakReference<Font>> allFonts = new HashMap<>();
 	
 	@SuppressWarnings("serial")
 	class FontExistsException extends Exception {
@@ -14,8 +17,6 @@ public class Font {
 		}
 	}
 	
-	private static HashMap<Integer, Font> allFonts = new HashMap<>();
-	
 	int id;
 
 	private Canvas canvas;
@@ -24,15 +25,19 @@ public class Font {
 		canvas = cnv;
 		id = NVG.createFont(canvas.nanoVGContext, name, path);
 		if (allFonts.containsKey(id)) throw new FontExistsException(id);
-		allFonts.put(id, this);
-			
+		allFonts.put(id, new WeakReference<>(this));
 	}
 	
 	static Font find(Canvas cnv, String name) {
-		return allFonts.get(NVG.findFont(cnv.nanoVGContext, name));
+		return find(NVG.findFont(cnv.nanoVGContext, name));
 	}
 	
 	static Font find(int id) {
-		return allFonts.get(id);
+		WeakReference<Font> f = allFonts.get(id);
+		if (f != null) {
+			return f.get();
+		} else {
+			return null;
+		}
 	}
 }

@@ -65,7 +65,7 @@ public class Framebuffer {
 		if (id != 0) {
 			int imgId = NVG.getImageFromFramebuffer(id);
 			Image img = Image.forId(canvas, imgId);
-			return img != null ? img : new Image(canvas, imgId);
+			return img != null ? img : new Image(canvas, imgId, false);
 		} else {
 			return null;
 		}
