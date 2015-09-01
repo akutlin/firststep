@@ -1,5 +1,6 @@
 package firststep.internal;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -320,7 +321,7 @@ public class NVG {
 	public static native void circle(long ctx, float x, float y, float r);
 
 	public static native int createImage(long ctx, String filename,
-			int imageFlags);
+			int imageFlags) throws IOException;
 
 	public static native int createImageMem(long ctx, byte[] data,
 			int imageFlags);

@@ -1,5 +1,7 @@
 package firststep;
 
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.EnumSet;
 import java.util.Iterator;
 
@@ -95,26 +97,35 @@ public class Image {
 	private Canvas canvas;
 	private boolean isDeleted;
 	
-	Image(Canvas cnv, String filename, Flags imageFlags) {
+	Image(Canvas cnv, String filename, Flags imageFlags) throws IOException {
 		canvas = cnv;
 		id = NVG.createImage(canvas.nanoVGContext, filename, imageFlags.toFlags());
-		canvas.allImages.put(id, this);
+		if (id == 0) {
+			throw new IOException("Can't load image from file " + filename);
+		}
+		canvas.allImages.put(id, new WeakReference<>(this));
 	}
 	
 	Image(Canvas cnv, byte[] data, Flags imageFlags) {
 		canvas = cnv;
 		id = NVG.createImageMem(canvas.nanoVGContext, data, imageFlags.toFlags());
-		canvas.allImages.put(id, this);
+		canvas.allImages.put(id, new WeakReference<>(this));
 	}
 	
 	Image(Canvas cnv, int id) {
 		canvas = cnv;
 		this.id = id;
-		canvas.allImages.put(id, this);
+		canvas.allImages.put(id, new WeakReference<>(this));
 	}
 	
 	static Image forId(Canvas cnv, int id) {
-		return cnv.allImages.get(id);
+		WeakReference<Image> ref = cnv.allImages.get(id);
+		if (ref != null) {
+			Image img = ref.get();
+			return img;
+		} else {
+			return null;
+		}
 	}
 	
 	public IntXY getSize() {
@@ -124,9 +135,17 @@ public class Image {
 	}
 	
 	public void delete() {
-		NVG.deleteImage(canvas.nanoVGContext, id);
-		canvas.allImages.remove(id);
-		isDeleted = true;
+		if (!isDeleted) {
+			NVG.deleteImage(canvas.nanoVGContext, id);
+			canvas.allImages.remove(id);
+			isDeleted = true;
+		}
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		delete();
+		super.finalize();
 	}
 	
 	public boolean isDeleted() {

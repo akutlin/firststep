@@ -1,15 +1,20 @@
 package firststep;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import firststep.internal.GLFW;
+import firststep.internal.JavaTools;
 import firststep.internal.NVG;
 
 public class Canvas {
 	
-	HashMap<Integer, Image> allImages = new HashMap<>();
+	HashMap<Integer, WeakReference<Image>> allImages = new HashMap<>();
 
 	/**
 	 * Line caps
@@ -215,8 +220,12 @@ public class Canvas {
 		NVG.circle(nanoVGContext, x, y, r);
 	}
 	
-	public Image createImage(String filename, Image.Flags imageFlags) {
+	public Image createImage(String filename, Image.Flags imageFlags) throws IOException {
 		return new Image(this, filename, imageFlags);
+	}
+
+	public Image createImageMem(InputStream is, Image.Flags imageFlags) throws IOException {
+		return new Image(this, JavaTools.convertSteamToByteArray(is, 65536), imageFlags);
 	}
 
 	public Image createImageMem(byte[] data, Image.Flags imageFlags) {

@@ -50,7 +50,7 @@ public class Framebuffer {
 		}
 	}
 	
-	public void delete() {
+	public synchronized void delete() {
 		if (!isDeleted) {
 			NVG.deleteFramebuffer(id);
 			isDeleted = true;
