@@ -15,7 +15,7 @@ public class Transform {
 		return new Transform(res);
 	}
 	
-	public static Transform translation(float x, float y) {
+	public static Transform translating(float x, float y) {
 		NVG.Transform res = new NVG.Transform();
 		res.translate(x, y);
 		return new Transform(res);
